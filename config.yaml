@@ -1,0 +1,33 @@
+# harbor-go-client configuration file (located at ~/config.yaml by default)
+---
+
+# General Configuration
+scheme: https
+#dstip: 11.11.11.12
+dstip: 10.1.0.13
+
+# System Configuration
+# Used for modifying system configurations that only provides for admin user
+auth_mode: db_auth  # DO NOT CHANGE THIS SETTING UNLESS YOU KNOW WHAT YOU ARE DOING
+email_from: admin <sample_admin@mydomain.com>
+email_host: smtp.mydomain.com
+email_port: 2525
+email_identity: ''
+email_username: sample_admin@mydomain.com
+email_ssl: false    # NOT ALLOW TO CHANGE
+email_insecure: true
+ldap_url: ldaps://ldap.mydomain.com
+ldap_base_dn: ou=people,dc=mydomain,dc=com
+ldap_filter: ''
+ldap_scope: 3
+ldap_uid: uid
+ldap_search_dn: ''
+ldap_timeout: 555
+project_creation_restriction: everyone
+self_registration: true
+token_expiration: 30
+verify_remote_cert: true
+scan_all_policy:
+  type: daily
+  parameter:
+    daily_time: 0

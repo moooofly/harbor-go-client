@@ -1,0 +1,15 @@
+package: git.llsapp.com/fei.sun/harbor-go-client
+license: MIT
+owners:
+- name: moooofly
+  email: centos.sf@gmail.com
+  homepage: https://github.com/moooofly/
+import:
+- package: github.com/jessevdk/go-flags
+  version: ^1.3.0
+- package: github.com/parnurzeal/gorequest
+  version: ^0.2.15
+- package: golang.org/x/sys
+  subpackages:
+  - unix
+- package: gopkg.in/yaml.v2

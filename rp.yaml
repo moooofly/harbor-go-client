@@ -1,0 +1,52 @@
+## Retention Policy
+##
+## base - base weight
+## factors.weight - weighting coefficient
+## factors.range - range of weighting coefficient being used
+---
+update_time:
+  base: 0.5
+  factors:
+  - weight: 1.0
+    range:
+      low: 0
+      high: 7
+  - weight: 0.9
+    range:
+      low: 7
+      high: 30
+  - weight: 0.8
+    range:
+      low: 30
+      high: 365
+pull_count:
+  base: 0.3
+  factors:
+  - weight: 1.0
+    range:
+      low: 1000
+      high: 30000
+  - weight: 0.9
+    range:
+      low: 100
+      high: 1000
+  - weight: 0.8
+    range:
+      low: 0
+      high: 100
+tags_count:
+  base: 0.1
+  factors:
+  - weight: 1.0
+    range:
+      low: 0
+      high: 5
+  - weight: 0.9
+    range:
+      low: 5
+      high: 20
+  - weight: 0.8
+    range:
+      low: 20
+      high: 3000
+
