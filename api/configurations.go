@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"git.llsapp.com/fei.sun/harbor-go-client/utils"
+	"github.com/moooofly/harbor-go-client/utils"
 )
 
 func init() {

@@ -3,11 +3,11 @@ package main
 import (
 	"os"
 
-	"git.llsapp.com/fei.sun/harbor-go-client/utils"
+	"github.com/moooofly/harbor-go-client/utils"
 
 	"github.com/jessevdk/go-flags"
 
-	_ "git.llsapp.com/fei.sun/harbor-go-client/api"
+	_ "github.com/moooofly/harbor-go-client/api"
 )
 
 func main() {

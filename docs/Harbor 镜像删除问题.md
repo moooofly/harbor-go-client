@@ -35,7 +35,7 @@ $ docker-compose start
 
 这里有一个问题需要弄清楚：**即删除镜像的过程中需要注意哪些问题**？
 
-详见《[Garbage Collection](https://git.llsapp.com/fei.sun/harbor-go-client/blob/master/docs/Garbage%20Collection.md)》
+详见《[Garbage Collection](https://github.com/moooofly/harbor-go-client/blob/master/docs/Garbage%20Collection.md)》
 
 相关链接：
 

@@ -66,7 +66,7 @@ Current support following custom feature:
 ## Installation
 
 ```
-go get -u git.llsapp.com/fei.sun/harbor-go-client
+go get -u github.com/moooofly/harbor-go-client
 ```
 
 ## Quick Start
@@ -112,7 +112,7 @@ make test
 
 ## License
 
-harbor-go-client is licensed under the MIT License. See [LICENSE](https://git.llsapp.com/fei.sun/harbor-go-client/blob/master/LICENSE) for the full license text.
+harbor-go-client is licensed under the MIT License. See [LICENSE](https://github.com/moooofly/harbor-go-client/blob/master/LICENSE) for the full license text.
 
 This project uses open source components which have additional licensing terms. The licensing terms for these open source components can be found at the following locations:
 
