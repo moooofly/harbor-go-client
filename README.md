@@ -1,3 +1,5 @@
+[![Go Report Card](https://goreportcard.com/badge/gojp/goreportcard)](https://goreportcard.com/report/github.com/moooofly/harbor-go-client)
+
 # harbor-go-client
 
 ```
