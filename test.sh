@@ -3,8 +3,8 @@
 HARBOR_ADDR=11.11.11.12
 PRJ_NAME=tmp
 
-SUCCESS="\033[42;30;1m Success \033[0m"""
-ERROR="\033[41;30;1m Error \033[0m"""
+SUCCESS="\033[42;30;1m Success \033[0m"
+ERROR="\033[41;30;1m Error \033[0m"
 
 prepare() {
 
