@@ -1,8 +1,8 @@
-hash: f21e1a5857975664feac5d8596e293375c8383b80cbb5777b420fc357c873483
-updated: 2017-12-05T11:30:55.956865266+08:00
+hash: cdb7379e9895f6c5e2b69ae9d3eb3e06022f7806636b12b1e58540d7475fa7c3
+updated: 2018-06-11T15:48:38.609709642+08:00
 imports:
 - name: github.com/jessevdk/go-flags
-  version: 96dc06278ce32a0e9d957d590bb987c81ee66407
+  version: c6ca198ec95c841fdb89fc0de7496fed11ab854e
 - name: github.com/moul/http2curl
   version: 9ac6cf4d929b2fa8fd2d2e6dec5bb0feb4f4911d
 - name: github.com/parnurzeal/gorequest
@@ -18,5 +18,5 @@ imports:
   subpackages:
   - unix
 - name: gopkg.in/yaml.v2
-  version: 287cf08546ab5e7e37d55a84f7ed3fd1db036de5
+  version: 5420a8b6744d3b0345ab293f6fcba19c978f1183
 testImports: []
