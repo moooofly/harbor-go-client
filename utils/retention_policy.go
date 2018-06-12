@@ -28,7 +28,7 @@ var stats statistics
 // ---
 
 type repoTop struct {
-	Id           int    `json:"id"`
+	ID           int    `json:"id"`
 	Name         string `json:"name"`
 	ProjectID    int    `json:"project_id"`
 	Description  string `json:"description"`
@@ -92,10 +92,10 @@ type reposRetentionPolicy struct {
 var reposRP reposRetentionPolicy
 
 func (x *reposRetentionPolicy) Execute(args []string) error {
-	if err := repo_analyse(); err != nil {
+	if err := repoAnalyse(); err != nil {
 		os.Exit(1)
 	}
-	if err := repo_erase(); err != nil {
+	if err := repoErase(); err != nil {
 		os.Exit(1)
 	}
 	rpGCHint()
@@ -110,13 +110,13 @@ type tagsRetentionPolicy struct {
 var tagsRP tagsRetentionPolicy
 
 func (x *tagsRetentionPolicy) Execute(args []string) error {
-	if err := tag_analyse_and_erase(); err != nil {
+	if err := tagAnalyseAndErase(); err != nil {
 		os.Exit(1)
 	}
 	return nil
 }
 
-func tag_analyse_and_erase() error {
+func tagAnalyseAndErase() error {
 
 	c, err := CookieLoad()
 	if err != nil {
@@ -327,13 +327,13 @@ func grade(r *repoTop, rp *retentionPolicy) float32 {
 
 	score := rp.UpdateTime.Base*uf + rp.PullCount.Base*pf + rp.TagsCount.Base*tf
 	fmt.Printf("[factors] ==> score = UpdateTimeBase*uf + PullCountBase*pf + TagsCountBase*tf = %.2f * %.2f + %.2f * %.2f + %.2f * %.2f = %.2f   repo_id: %d\n",
-		rp.UpdateTime.Base, uf, rp.PullCount.Base, pf, rp.TagsCount.Base, tf, score, r.Id)
+		rp.UpdateTime.Base, uf, rp.PullCount.Base, pf, rp.TagsCount.Base, tf, score, r.ID)
 
 	return score
 }
 
-// repo_analyse calculates scores and output topN element by minheap sort
-func repo_analyse() error {
+// repoAnalyse calculates scores and output topN element by minheap sort
+func repoAnalyse() error {
 
 	rp, err := rpLoad()
 	if err != nil {
@@ -378,7 +378,7 @@ func repo_analyse() error {
 	}
 
 	heap.Init(&minh)
-	heap.Init(&mh_bk)
+	heap.Init(&mhBk)
 	for _, r := range repos {
 		sc := grade(r, rp)
 
@@ -400,21 +400,21 @@ func repo_analyse() error {
 			score: sc,
 		}
 		heap.Push(&minh, it)
-		heap.Push(&mh_bk, it)
+		heap.Push(&mhBk, it)
 	}
 
 	fmt.Printf("\n========== 根据分数排名（由低到高）建议删除 public repo 信息如下 ========\n\n")
 
-	for mh_bk.Len() > 0 {
-		it := heap.Pop(&mh_bk).(*repoItem)
+	for mhBk.Len() > 0 {
+		it := heap.Pop(&mhBk).(*repoItem)
 		fmt.Printf("%.2f <==> %+v\n", it.score, *it.data)
 	}
 
 	return nil
 }
 
-// repo_erase implements soft deletion
-func repo_erase() error {
+// repoErase implements soft deletion
+func repoErase() error {
 
 	var num int
 	scanner := bufio.NewScanner(os.Stdin)
@@ -450,7 +450,7 @@ func repo_erase() error {
 	if num <= 0 || num > 50 {
 		fmt.Println("[Warning] The valid number range is (0, 50].")
 		fmt.Println("[Warning] Sorry, you're not allowed proceeding... Abort.")
-		return fmt.Errorf("error: The number is Out of Range.")
+		return fmt.Errorf("error: the number is out of range")
 	}
 
 	fmt.Printf("\n=== 开始 soft deletion ===\n\n")
@@ -476,7 +476,7 @@ func repo_erase() error {
 				Set("Cookie", "harbor-lang=zh-cn; beegosessionID="+c.BeegosessionID).
 				End(PrintStatus)
 		}
-		num -= 1
+		num--
 	}
 
 	fmt.Printf("\n=== 完成 soft deletion ===\n\n")

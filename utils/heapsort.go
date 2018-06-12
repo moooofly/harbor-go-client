@@ -70,14 +70,14 @@ func (h *minheap) Pop() interface{} {
 
 // Sort on the score of repos
 var minh = minheap{}
-var mh_bk = minheap{}
+var mhBk = minheap{}
 
 func example1() {
 
 	h := minheap{
 		&repoItem{
 			data: &repoTop{
-				Id:           31,
+				ID:           31,
 				Name:         "prj2/photon",
 				ProjectID:    3,
 				Description:  "",
@@ -91,7 +91,7 @@ func example1() {
 		},
 		&repoItem{
 			data: &repoTop{
-				Id:           30,
+				ID:           30,
 				Name:         "sf3prj/hello-world",
 				ProjectID:    13,
 				Description:  "",
@@ -105,7 +105,7 @@ func example1() {
 		},
 		&repoItem{
 			data: &repoTop{
-				Id:           29,
+				ID:           29,
 				Name:         "prj5/hello-world",
 				ProjectID:    6,
 				Description:  "",
@@ -119,7 +119,7 @@ func example1() {
 		},
 		&repoItem{
 			data: &repoTop{
-				Id:           4,
+				ID:           4,
 				Name:         "prj3/hello-world",
 				ProjectID:    4,
 				Description:  "",

@@ -14,8 +14,8 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
-var errMalCookies = errors.New("Get Malformed Cookies.")
-var errCookiesNotAvailable = errors.New("Target Cookies are Not Available.")
+var errMalCookies = errors.New("get malformed cookies")
+var errCookiesNotAvailable = errors.New("target cookies are not available")
 
 // Parser is a command registry
 var Parser = flags.NewParser(nil, flags.Default)
@@ -27,7 +27,8 @@ var Request = gorequest.New().TLSClientConfig(&tls.Config{InsecureSkipVerify: tr
 var configfile = "./config.yaml"
 var secretfile = "./.cookie.yaml"
 
-type beegocookie struct {
+// Beegocookie is for beegosessionID storage
+type Beegocookie struct {
 	BeegosessionID string `yaml:"beegosessionID"`
 }
 
@@ -36,7 +37,8 @@ type generalConfig struct {
 	Dstip  string `yaml:"dstip"`
 }
 
-type sysConfig struct {
+// SysConfig defines system configurations
+type SysConfig struct {
 	AuthMode                   string `yaml:"auth_mode" json:"auth_mode"`
 	EmailFrom                  string `yaml:"email_from" json:"email_from"`
 	EmailHost                  string `yaml:"email_host" json:"email_host"`
@@ -45,11 +47,11 @@ type sysConfig struct {
 	EmailUsername              string `yaml:"email_username" json:"email_username"`
 	EmailSsl                   bool   `yaml:"email_ssl" json:"email_ssl"`
 	EmailInsecure              bool   `yaml:"email_insecure" json:"email_insecure"`
-	LdapUrl                    string `yaml:"ldap_url" json:"ldap_url"`
+	LdapURL                    string `yaml:"ldap_url" json:"ldap_url"`
 	LdapBaseDN                 string `yaml:"ldap_base_dn" json:"ldap_base_dn"`
 	LdapFilter                 string `yaml:"ldap_filter" json:"ldap_filter"`
 	LdapScope                  int    `yaml:"ldap_scope" json:"ldap_scope"`
-	LdapUid                    string `yaml:"ldap_uid" jsonb:"ldap_uid"`
+	LdapUID                    string `yaml:"ldap_uid" jsonb:"ldap_uid"`
 	LdapSearchDN               string `yaml:"ldap_search_dn" json:"ldap_search_dn"`
 	LdapTimeout                int    `yaml:"ldap_timeout" json:"ldap_timeout"`
 	ProjectCreationRestriction string `yaml:"project_creation_restriction" json:"project_creation_restriction"`
@@ -99,7 +101,7 @@ func cookieFilter(cookies []*http.Cookie, filter string) (string, error) {
 // .cookie.yaml no matter whether it exists or not.
 func cookieSave(beegosessionID string) error {
 
-	var cookie beegocookie
+	var cookie Beegocookie
 	cookie.BeegosessionID = beegosessionID
 
 	c, err := yaml.Marshal(&cookie)
@@ -116,8 +118,8 @@ func cookieSave(beegosessionID string) error {
 }
 
 // CookieLoad loads beegosessionID from .cookie.yaml.
-func CookieLoad() (*beegocookie, error) {
-	var cookie beegocookie
+func CookieLoad() (*Beegocookie, error) {
+	var cookie Beegocookie
 
 	dataBytes, err := ioutil.ReadFile(secretfile)
 	if err != nil {
@@ -132,8 +134,8 @@ func CookieLoad() (*beegocookie, error) {
 }
 
 // SysConfigLoad loads system configuration from config.yaml.
-func SysConfigLoad() (*sysConfig, error) {
-	var config sysConfig
+func SysConfigLoad() (*SysConfig, error) {
+	var config SysConfig
 
 	dataBytes, err := ioutil.ReadFile(configfile)
 	if err != nil {

@@ -290,7 +290,7 @@ func (c *controllerImpl) chooseExpectationLocked(
 func makeZeroReturnValues(signature reflect.Type) []interface{} {
 	result := make([]interface{}, signature.NumOut())
 
-	for i, _ := range result {
+	for i := range result {
 		outType := signature.Out(i)
 		zeroVal := reflect.Zero(outType)
 		result[i] = zeroVal.Interface()

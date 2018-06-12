@@ -84,7 +84,7 @@ func (x *targetsPing) Execute(args []string) error {
 }
 
 type targetsPingByID struct {
-	Id int `short:"i" long:"id" description:"(REQUIRED) The replication's target ID." required:"yes"`
+	ID int `short:"i" long:"id" description:"(REQUIRED) The replication's target ID." required:"yes"`
 }
 
 var tpingByID targetsPingByID
@@ -95,7 +95,7 @@ func (x *targetsPingByID) Execute(args []string) error {
 }
 
 type targetsDeleteByID struct {
-	Id int `short:"i" long:"id" description:"(REQUIRED) The replication's target ID." required:"yes"`
+	ID int `short:"i" long:"id" description:"(REQUIRED) The replication's target ID." required:"yes"`
 }
 
 var tdByID targetsDeleteByID
@@ -106,7 +106,7 @@ func (x *targetsDeleteByID) Execute(args []string) error {
 }
 
 type targetsGetByID struct {
-	Id int `short:"i" long:"id" description:"(REQUIRED) The replication's target ID." required:"yes"`
+	ID int `short:"i" long:"id" description:"(REQUIRED) The replication's target ID." required:"yes"`
 }
 
 var tgByID targetsGetByID
@@ -117,7 +117,7 @@ func (x *targetsGetByID) Execute(args []string) error {
 }
 
 type targetsUpdateByID struct {
-	Id           int    `short:"i" long:"id" description:"(REQUIRED) The replication's target ID." required:"yes" json:"-"`
+	ID           int    `short:"i" long:"id" description:"(REQUIRED) The replication's target ID." required:"yes" json:"-"`
 	EndpointURL  string `short:"e" long:"endpoint" description:"(REQUIRED) The target address URL string." required:"yes" json:"endpoint"`
 	EndpointName string `short:"n" long:"name" description:"(REQUIRED) The target name." required:"yes" json:"name"`
 	Username     string `short:"u" long:"username" description:"(REQUIRED) The target server username." required:"yes" json:"username"`
@@ -133,7 +133,7 @@ func (x *targetsUpdateByID) Execute(args []string) error {
 }
 
 type targetsPoliciesByID struct {
-	Id int `short:"i" long:"id" description:"(REQUIRED) The replication's target ID." required:"yes"`
+	ID int `short:"i" long:"id" description:"(REQUIRED) The replication's target ID." required:"yes"`
 }
 
 var tpoliciesByID targetsPoliciesByID
@@ -254,7 +254,7 @@ func PostTargetsPing(baseURL string) {
 //
 // e.g. curl -X POST --header 'Content-Type: application/json' --header 'Accept: text/plain' 'https://11.11.11.12/api/targets/1/ping'
 func PostTargetsPingByID(baseURL string) {
-	targetURL := baseURL + "/" + strconv.Itoa(tpingByID.Id) + "/ping"
+	targetURL := baseURL + "/" + strconv.Itoa(tpingByID.ID) + "/ping"
 	fmt.Println("==> POST", targetURL)
 
 	// Read beegosessionID from .cookie.yaml
@@ -276,7 +276,7 @@ func PostTargetsPingByID(baseURL string) {
 //
 // e.g. curl -X DELETE --header 'Accept: text/plain' 'https://11.11.11.12/api/targets/2'
 func DeleteTargetsByID(baseURL string) {
-	targetURL := baseURL + "/" + strconv.Itoa(tdByID.Id)
+	targetURL := baseURL + "/" + strconv.Itoa(tdByID.ID)
 	fmt.Println("==> DELETE", targetURL)
 
 	// Read beegosessionID from .cookie.yaml
@@ -298,7 +298,7 @@ func DeleteTargetsByID(baseURL string) {
 //
 // e.g. curl -X GET --header 'Accept: application/json' 'https://11.11.11.12/api/targets/1'
 func GetTargetsByID(baseURL string) {
-	targetURL := baseURL + "/" + strconv.Itoa(tgByID.Id)
+	targetURL := baseURL + "/" + strconv.Itoa(tgByID.ID)
 	fmt.Println("==> GET", targetURL)
 
 	// Read beegosessionID from .cookie.yaml
@@ -334,7 +334,7 @@ curl -X PUT --header 'Content-Type: text/plain' --header 'Accept: text/plain' -d
 }' 'https://11.11.11.12/api/targets/4'
 */
 func UpdateTargetsByID(baseURL string) {
-	targetURL := baseURL + "/" + strconv.Itoa(tuByID.Id)
+	targetURL := baseURL + "/" + strconv.Itoa(tuByID.ID)
 	fmt.Println("==> PUT", targetURL)
 
 	// Read beegosessionID from .cookie.yaml
@@ -365,7 +365,7 @@ func UpdateTargetsByID(baseURL string) {
 //
 // e.g. curl -X GET --header 'Accept: application/json' 'https://11.11.11.12/api/targets/1/policies/'
 func GetPoliciesByID(baseURL string) {
-	targetURL := baseURL + "/" + strconv.Itoa(tpoliciesByID.Id) + "/policies/"
+	targetURL := baseURL + "/" + strconv.Itoa(tpoliciesByID.ID) + "/policies/"
 	fmt.Println("==> GET", targetURL)
 
 	// Read beegosessionID from .cookie.yaml

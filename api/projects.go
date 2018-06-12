@@ -14,7 +14,7 @@ func init() {
 		"This endpoint is for user to create a new project.",
 		&prjCreate)
 	utils.Parser.AddCommand("prj_get",
-		"Return specific project detail infomation.",
+		"Return specific project detail information.",
 		"This endpoint returns specific project information by project ID.",
 		&prjGet)
 	utils.Parser.AddCommand("prj_del",

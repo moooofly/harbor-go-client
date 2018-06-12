@@ -137,7 +137,7 @@ func Go(cb func()) {
 	mgrRegistryMtx.RLock()
 	defer mgrRegistryMtx.RUnlock()
 
-	for mgr, _ := range mgrRegistry {
+	for mgr := range mgrRegistry {
 		values := mgr.getValues()
 		if len(values) > 0 {
 			mgr_copy := mgr
