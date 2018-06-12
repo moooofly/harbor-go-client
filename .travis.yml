@@ -7,6 +7,10 @@ go:
   - "1.9.x"
   - master
 
+before_install:
+  - go get -v github.com/golang/lint/golint
+  - go get -v github.com/alecthomas/gometalinter
+
 install:
   - make install
 
