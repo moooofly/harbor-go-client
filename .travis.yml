@@ -1,0 +1,19 @@
+language: go
+
+go_import_path: github.com/moooofly/harbor-go-client
+
+go:
+  - "1.8.x"
+  - "1.9.x"
+  - master
+
+install:
+  - make install
+
+script:
+  - make lint
+  - make test
+  - make misspell
+
+notifications:
+  email: fei.sun@liulishuo.com
