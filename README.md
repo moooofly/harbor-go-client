@@ -73,10 +73,16 @@ go get -u github.com/moooofly/harbor-go-client
 
 ## Quick Start
 
-- compiles and installs the packages
+- lint + build + test
 
 ```
 make
+```
+
+- install the package into $GOPATH
+
+```
+make install
 ```
 
 - remove the corresponding installed archive or binary (what 'go install' would create)
@@ -95,15 +101,15 @@ make test
 
 ## Testing
 
-## TODO
+## Auxiliaries Coverage
 
-- go test
-- CI (gitlab-ci & travis-ci）
-- dockerization
-- godoc
-- test.sh colorful output
-- glide support
-- sql-like result output
+- [ ] go test
+- [x] CI (gitlab-ci & travis-ci）
+- [ ] dockerization
+- [ ] godoc
+- [x] test.sh colorful output
+- [x] glide support
+- [x] sql-like result output
 
 
 ## Credits
