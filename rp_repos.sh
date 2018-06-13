@@ -5,7 +5,7 @@ TAGS_NUM=$2
 PULL_NUM=$3
 
 PROJECT_NAME=temp
-HARBOR_ADDR=11.11.11.12
+HARBOR_ADDR=localhost
 
 # color setting
 L1="\033[42;30;1m"

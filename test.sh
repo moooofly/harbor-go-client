@@ -1,6 +1,6 @@
 #!/bin/sh
 
-HARBOR_ADDR=11.11.11.12
+HARBOR_ADDR=localhost
 PRJ_NAME=tmp
 
 SUCCESS="\033[42;30;1m Success \033[0m"
