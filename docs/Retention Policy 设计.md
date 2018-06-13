@@ -1,3 +1,7 @@
+# WARNING
+
+> **Notice:** This document is **deprecated**, this here is kept for historical purpose.
+
 # Retention Policy 设计
 
 ## 前提
@@ -40,7 +44,7 @@
 
 ### 分析
 
-- 理论上将，在 harbor 中针对 `projects`/`repositories`/`tags`/`images` 这些对象都可以进行清理操作（其中 images 的处理和其他有所不同）；
+- 理论上讲，在 harbor 中针对 `projects`/`repositories`/`tags`/`images` 这些对象都可以进行清理操作（其中 images 的处理和其他有所不同）；
 - 当前设计主要针对 **repositories** 级别进行清理操作；
 - harbor-go-client 的实现基于 harbor v1.2.0 版本进行；
 

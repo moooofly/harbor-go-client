@@ -18,8 +18,8 @@
 > Run the below commands on the host which Harbor is deployed on to **preview** what files/images will be affected:
 >
 > ```
-$ docker-compose stop
-$ docker run -it --name gc --rm --volumes-from registry vmware/registry:2.6.2-photon garbage-collect --dry-run /etc/registry/config.yml
+> $ docker-compose stop
+> $ docker run -it --name gc --rm --volumes-from registry vmware/registry:2.6.2-photon garbage-collect --dry-run /etc/registry/config.yml
 > ```
 >
 > NOTE: The above option "--dry-run" will print the progress without removing any data.
@@ -27,8 +27,8 @@ $ docker run -it --name gc --rm --volumes-from registry vmware/registry:2.6.2-ph
 > Verify the result of the above test, then use the below commands to **perform garbage collection** and restart Harbor.
 >
 > ```
-$ docker run -it --name gc --rm --volumes-from registry vmware/registry:2.6.2-photon garbage-collect  /etc/registry/config.yml
-$ docker-compose start
+> $ docker run -it --name gc --rm --volumes-from registry vmware/registry:2.6.2-photon garbage-collect  /etc/registry/config.yml
+> $ docker-compose start
 > ```
 >
 > For more information about GC, please see GC.
