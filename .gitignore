@@ -1,6 +1,7 @@
 # customize
 
 harbor-go-client
+*.tar.gz
 
 
 # Created by https://www.gitignore.io/api/go,vim
