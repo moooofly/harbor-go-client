@@ -182,11 +182,12 @@ func tagAnalyseAndErase() error {
 		}
 		// b. 针对创建于 N 天之外的 tag ，每个 repo 最多保留 Max 个
 		gtNdays := maxh.Len()
+		fmt.Printf("==> less then (%d days): %d    more than (%d days): %d\n",
+			tagsRP.Day, r.TagsCount-gtNdays, tagsRP.Day, gtNdays)
 		if gtNdays <= tagsRP.Max {
-			fmt.Printf("==> less then (%d days): %d    more than (%d days): %d\n",
-				tagsRP.Day, r.TagsCount-gtNdays, tagsRP.Day, gtNdays)
 			fmt.Printf("===> untouched quantity (%d) more than %d, so DO NOTHING.\n", tagsRP.Max, gtNdays)
 		} else {
+			fmt.Printf("===> untouched quantity (%d) less than %d, so START DELETing.\n", tagsRP.Max, gtNdays)
 			for gtNdays > tagsRP.Max {
 				it := heap.Pop(&maxh).(*tagItem)
 				//fmt.Printf("[POP] %s <==> %d\n", it.tagName, it.timestamp)
