@@ -103,8 +103,9 @@ func (x *reposRetentionPolicy) Execute(args []string) error {
 }
 
 type tagsRetentionPolicy struct {
-	Day int `short:"d" long:"day" description:"(REQUIRED) The tags of a repository created less than N days should not be deleted." required:"yes"`
-	Max int `long:"max" description:"(REQUIRED) The maximum quantity of tags created more than N days of a repository should keep untouched." required:"yes"`
+	Day      int    `short:"d" long:"day" description:"(REQUIRED) The tags of a repository created less than N days should not be deleted." required:"yes"`
+	Max      int    `short:"m" long:"max" description:"(REQUIRED) The maximum quantity of tags created more than N days of a repository should keep untouched." required:"yes"`
+	RepoName string `short:"n" long:"repo_name" description:"Repo name for specific target. If not set, rp_tags will do jobs on all repos." default:""`
 }
 
 var tagsRP tagsRetentionPolicy
@@ -117,6 +118,10 @@ func (x *tagsRetentionPolicy) Execute(args []string) error {
 }
 
 func tagAnalyseAndErase() error {
+	fmt.Println("=========================")
+	fmt.Println("==  开始 tags RP 分析  ==")
+	fmt.Println("=========================")
+	fmt.Println()
 
 	c, err := CookieLoad()
 	if err != nil {
@@ -126,7 +131,9 @@ func tagAnalyseAndErase() error {
 
 	// 基于 search 接口获取全部 projects 和 repositories 信息
 	// 设置 "q=" 可以获取全部信息
-	searchURL := URLGen("/api/search") + "?q="
+	// 设置 "q=xxx" 可以过滤指定信息，但是目前发现该功能有 bug ，故暂时无法基于该接口针对指定 repo 进行处理
+	searchURL := URLGen("/api/search") + "?q=" + tagsRP.RepoName
+	fmt.Println("--------------------")
 	fmt.Println("==> GET", searchURL)
 
 	_, _, errs := Request.Get(searchURL).
@@ -139,12 +146,21 @@ func tagAnalyseAndErase() error {
 		}
 	}
 
-	fmt.Printf("\n=== 开始 tags RP 分析 ===\n\n")
-	fmt.Printf("==> maximum untouched: %d\n", tagsRP.Max)
+	if tagsRP.RepoName == "" {
+		fmt.Printf("==> on all Repos, max-days-untouched: %d   max-keep-num-after-Ndays: %d\n",
+			tagsRP.Day, tagsRP.Max)
+	} else {
+		fmt.Printf("==> only on Repo [%s], max-days-untouched: %d   max-keep-num-after-Ndays: %d\n",
+			tagsRP.RepoName, tagsRP.Day, tagsRP.Max)
+	}
+	fmt.Println("--------------------")
 
 	// 遍历全部 repositories 信息
 	for _, r := range scRsp.Repository {
-		fmt.Printf("\n==> repo_name: %s    tags_count: %d\n", r.RepositoryName, r.TagsCount)
+		fmt.Println("\n")
+		fmt.Println("------------------------------------------------------")
+		fmt.Printf("| repo_name: %s | tags_count: %d |\n", r.RepositoryName, r.TagsCount)
+		fmt.Println("------------------------------------------------------")
 
 		// 获取每个 repo 下的 tags 信息
 		tagsListURL := URLGen("/api/repositories") + "/" + r.RepositoryName + "/tags"
@@ -161,8 +177,8 @@ func tagAnalyseAndErase() error {
 		}
 
 		// 用于针对每个 repo 下的 tags 进行排序
-		maxh = maxheap{}
-		heap.Init(&maxh)
+		tagmh = tagminheap{}
+		heap.Init(&tagmh)
 		for _, t := range tlRsp {
 			//fmt.Printf("==> name: %s    created: %s\n", t.Name, t.Created)
 
@@ -175,26 +191,31 @@ func tagAnalyseAndErase() error {
 					tagName:   t.Name,
 					timestamp: tagC.Unix(),
 				}
-				// 超过 N 天的 tag 保存到 maxheap
-				//fmt.Printf("[PUSH] %s <==> create(%s)    dayPast(%f)\n", it.tagName, t.Created, dayPast)
-				heap.Push(&maxh, it)
+				// 超过 N 天的 tag 保存到 minheap
+				fmt.Printf("[PUSH] %s <==> create: %s    dayPast: %f\n", it.tagName, t.Created, dayPast)
+				heap.Push(&tagmh, it)
+			} else {
+				fmt.Printf("[noPUSH] %s <==> create: %s    dayPast: %f\n", t.Name, t.Created, dayPast)
 			}
+
 		}
 		// b. 针对创建于 N 天之外的 tag ，每个 repo 最多保留 Max 个
-		gtNdays := maxh.Len()
-		fmt.Printf("==> less then (%d days): %d    more than (%d days): %d\n",
+		gtNdays := tagmh.Len()
+		fmt.Println("---")
+		fmt.Printf("--> # of tags less than %d days: %d , # of tags more than %d days: %d\n",
 			tagsRP.Day, r.TagsCount-gtNdays, tagsRP.Day, gtNdays)
 		if gtNdays <= tagsRP.Max {
-			fmt.Printf("===> untouched quantity (%d) more than %d, so DO NOTHING.\n", tagsRP.Max, gtNdays)
+			fmt.Printf("--> max-keep-num-after-Ndays (%d) more than actual num (%d), so DO NOTHING.\n", tagsRP.Max, gtNdays)
 		} else {
-			fmt.Printf("===> untouched quantity (%d) less than %d, so START DELETing.\n", tagsRP.Max, gtNdays)
+			fmt.Printf("--> max-keep-num-after-Ndays (%d) less than actual num (%d), so START DELETING.\n", tagsRP.Max, gtNdays)
+			fmt.Println("---")
 			for gtNdays > tagsRP.Max {
-				it := heap.Pop(&maxh).(*tagItem)
-				//fmt.Printf("[POP] %s <==> %d\n", it.tagName, it.timestamp)
+				it := heap.Pop(&tagmh).(*tagItem)
+				fmt.Printf("[POP] %s <==> %d\n", it.tagName, it.timestamp)
 
-				// 如果 len(maxheap) > max 则删除 len(maxheap) - max 个 tag
+				// 如果 len(minheap) > max 则删除 len(minheap) - max 个 tag
 				targetURL := URLGen("/api/repositories") + "/" + r.RepositoryName + "/tags/" + it.tagName
-				fmt.Println("\n==> DELETE", targetURL)
+				fmt.Println("==> DELETE", targetURL)
 
 				Request.Delete(targetURL).
 					Set("Cookie", "harbor-lang=zh-cn; beegosessionID="+c.BeegosessionID).
