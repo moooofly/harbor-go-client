@@ -1,5 +1,6 @@
 # customize
 
+.cookie.yaml
 harbor-go-client
 *.tar.gz
 
