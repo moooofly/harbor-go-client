@@ -10,24 +10,24 @@ type tagItem struct {
 	timestamp int64
 }
 
-type maxheap []*tagItem
+type tagminheap []*tagItem
 
-func (h maxheap) Len() int { return len(h) }
+func (h tagminheap) Len() int { return len(h) }
 
-func (h maxheap) Less(i, j int) bool {
-	return h[i].timestamp > h[j].timestamp
+func (h tagminheap) Less(i, j int) bool {
+	return h[i].timestamp < h[j].timestamp
 }
 
-func (h maxheap) Swap(i, j int) {
+func (h tagminheap) Swap(i, j int) {
 	h[i], h[j] = h[j], h[i]
 }
 
-func (h *maxheap) Push(x interface{}) {
+func (h *tagminheap) Push(x interface{}) {
 	it := x.(*tagItem)
 	*h = append(*h, it)
 }
 
-func (h *maxheap) Pop() interface{} {
+func (h *tagminheap) Pop() interface{} {
 	old := *h
 	n := len(old)
 	it := old[n-1]
@@ -36,31 +36,33 @@ func (h *maxheap) Pop() interface{} {
 }
 
 // Sort on UNIX timestamp of tags
-var maxh maxheap
+var tagmh tagminheap
+
+// -------------
 
 type repoItem struct {
 	data  *repoTop
 	score float32
 }
 
-type minheap []*repoItem
+type repominheap []*repoItem
 
-func (h minheap) Len() int { return len(h) }
+func (h repominheap) Len() int { return len(h) }
 
-func (h minheap) Less(i, j int) bool {
+func (h repominheap) Less(i, j int) bool {
 	return h[i].score < h[j].score
 }
 
-func (h minheap) Swap(i, j int) {
+func (h repominheap) Swap(i, j int) {
 	h[i], h[j] = h[j], h[i]
 }
 
-func (h *minheap) Push(x interface{}) {
+func (h *repominheap) Push(x interface{}) {
 	it := x.(*repoItem)
 	*h = append(*h, it)
 }
 
-func (h *minheap) Pop() interface{} {
+func (h *repominheap) Pop() interface{} {
 	old := *h
 	n := len(old)
 	it := old[n-1]
@@ -69,12 +71,12 @@ func (h *minheap) Pop() interface{} {
 }
 
 // Sort on the score of repos
-var minh = minheap{}
-var mhBk = minheap{}
+var minh = repominheap{}
+var mhBk = repominheap{}
 
 func example1() {
 
-	h := minheap{
+	h := repominheap{
 		&repoItem{
 			data: &repoTop{
 				ID:           31,
