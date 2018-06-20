@@ -157,10 +157,15 @@ func tagAnalyseAndErase() error {
 
 	// 遍历全部 repositories 信息
 	for _, r := range scRsp.Repository {
-		fmt.Println("\n")
+		fmt.Println(" ")
 		fmt.Println("------------------------------------------------------")
 		fmt.Printf("| repo_name: %s | tags_count: %d |\n", r.RepositoryName, r.TagsCount)
 		fmt.Println("------------------------------------------------------")
+		fmt.Println("---")
+
+		fmt.Println("+------------+----------------------------------------------------+----------------------------------+-----------------+")
+		fmt.Printf("| % -10s | % -50s | % -32s | % -15s |\n", "Action", "TagName", "CreateTime", "DaysPast")
+		fmt.Println("+------------+----------------------------------------------------+----------------------------------+-----------------+")
 
 		// 获取每个 repo 下的 tags 信息
 		tagsListURL := URLGen("/api/repositories") + "/" + r.RepositoryName + "/tags"
@@ -192,16 +197,18 @@ func tagAnalyseAndErase() error {
 					timestamp: tagC.Unix(),
 				}
 				// 超过 N 天的 tag 保存到 minheap
-				fmt.Printf("[PUSH] %s <==> create: %s    dayPast: %f\n", it.tagName, t.Created, dayPast)
+				//fmt.Printf("[PUSH] %s <==> create: %s    dayPast: %f\n", it.tagName, t.Created, dayPast)
+				fmt.Printf("| % -10s | % -50s | % -32s | % -15f |\n", "PUSH", t.Name, t.Created, dayPast)
 				heap.Push(&tagmh, it)
 			} else {
-				fmt.Printf("[noPUSH] %s <==> create: %s    dayPast: %f\n", t.Name, t.Created, dayPast)
+				//fmt.Printf("[noPUSH] %s <==> create: %s    dayPast: %f\n", t.Name, t.Created, dayPast)
+				fmt.Printf("| % -10s | % -50s | % -32s | % -15f |\n", "not PUSH", t.Name, t.Created, dayPast)
 			}
 
 		}
 		// b. 针对创建于 N 天之外的 tag ，每个 repo 最多保留 Max 个
 		gtNdays := tagmh.Len()
-		fmt.Println("---")
+		fmt.Println("+------------+----------------------------------------------------+----------------------------------+-----------------+")
 		fmt.Printf("--> # of tags less than %d days: %d , # of tags more than %d days: %d\n",
 			tagsRP.Day, r.TagsCount-gtNdays, tagsRP.Day, gtNdays)
 		if gtNdays <= tagsRP.Max {
