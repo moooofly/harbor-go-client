@@ -26,6 +26,7 @@ var Request = gorequest.New().TLSClientConfig(&tls.Config{InsecureSkipVerify: tr
 
 var configfile = "./config.yaml"
 var secretfile = "./.cookie.yaml"
+var versionfile = "./VERSION"
 
 // Beegocookie is for beegosessionID storage
 type Beegocookie struct {
