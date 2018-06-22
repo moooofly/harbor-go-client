@@ -8,6 +8,10 @@ ERROR="\033[41;30;1m Error \033[0m"
 
 prepare() {
 
+    echo "----- build harbor-go-client for tesing -----"
+    go build -v ../
+    echo "-----------------\n\n"
+
     echo "----- docker login -----"
     docker login --username admin --password Harbor12345 $HARBOR_ADDR
     echo
@@ -52,6 +56,10 @@ cleanup() {
 
     echo "----- docker logout -----"
     docker logout $HARBOR_ADDR
+    echo "-----------------\n\n"
+
+    echo "----- remove harbor-go-client -----"
+    rm harbor-go-client
     echo "-----------------\n\n"
 }
 
@@ -337,6 +345,10 @@ projects_test() {
 
 users_test() {
 
+    echo "----- build harbor-go-client for tesing -----"
+    go build -v ../
+    echo "-----------------\n\n"
+
     echo "----- harbor-go-client login -----"
     ./harbor-go-client login -u admin -p Harbor12345 && echo "${SUCCESS} username: admin\n${SUCCESS} Save .cookie.yaml" || echo "${ERROR}"
     echo "-----------------\n\n"
@@ -348,6 +360,10 @@ users_test() {
     echo "----- logout -----"
     ./harbor-go-client logout && echo "${SUCCESS} Delete .cookie.yaml" || echo "${ERROR}"
     echo "-----------------\n\n"
+
+    echo "----- remove harbor-go-client -----"
+    rm harbor-go-client
+    echo "-----------------\n\n"
 }
 
 retention_policy_test() {
@@ -358,7 +374,7 @@ retention_policy_test() {
     echo "===================================="
     echo
 
-    ./rp_repos.sh 10 10 10
+    ./rp_repos_simulation.sh 10 10 10
     echo "-----------------\n\n"
 }
 
