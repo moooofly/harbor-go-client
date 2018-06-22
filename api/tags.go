@@ -63,7 +63,7 @@ func (x *tagsList) Execute(args []string) error {
 //  repo_name - (REQUIRED) Relevant repository name.
 //  tag       - (REQUIRED) Tag of the repository.
 //
-// e.g. curl -X GET --header 'Accept: application/json' 'https://11.11.11.12/api/repositories/prj2%2Fphoton/tags/v2'
+// e.g. curl -X GET --header 'Accept: application/json' 'https://localhost/api/repositories/prj2%2Fphoton/tags/v2'
 func GetTaginfoOfRepo(baseURL string) {
 	targetURL := baseURL + "/" + tagget.RepoName + "/tags/" + tagget.Tag
 	fmt.Println("==> GET", targetURL)
@@ -86,7 +86,7 @@ func GetTaginfoOfRepo(baseURL string) {
 //  repo_name - (REQUIRED) The name of repository which will be deleted.
 //  tag       - (REQUIRED) Tag of a repository.
 //
-// e.g. curl -X DELETE --header 'Accept: text/plain' 'https://11.11.11.12/api/repositories/prj2%2Fphoton/tags/v2'
+// e.g. curl -X DELETE --header 'Accept: text/plain' 'https://localhost/api/repositories/prj2%2Fphoton/tags/v2'
 func DelTaginfoOfRepo(baseURL string) {
 	targetURL := baseURL + "/" + tagdel.RepoName + "/tags/" + tagdel.Tag
 	fmt.Println("==> DELETE", targetURL)
@@ -108,7 +108,7 @@ func DelTaginfoOfRepo(baseURL string) {
 // params:
 //  repo_name - (REQUIRED) Relevant repository name.
 //
-// e.g. curl -X GET --header 'Accept: application/json' 'https://11.11.11.12/api/repositories/prj2%2Fphoton/tags'
+// e.g. curl -X GET --header 'Accept: application/json' 'https://localhost/api/repositories/prj2%2Fphoton/tags'
 func GetTagsByRepoName(baseURL string) {
 	targetURL := baseURL + "/" + tagslist.RepoName + "/tags"
 	fmt.Println("==> GET", targetURL)

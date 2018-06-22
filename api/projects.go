@@ -106,7 +106,7 @@ curl -X POST --header 'Content-Type: text/plain' --header 'Accept: text/plain' -
   "prevent_vulnerable_images_from_running": false,
   "prevent_vulnerable_images_from_running_severity": "",
   "automatically_scan_images_on_push": false
-}' 'https://11.11.11.12/api/projects'
+}' 'https://localhost/api/projects'
 */
 func PostPrjCreate(baseURL string) {
 	targetURL := baseURL
@@ -136,7 +136,7 @@ func PostPrjCreate(baseURL string) {
 // params:
 //  project_id - (REQUIRED) Project ID of project which will be get.
 //
-// e.g. curl -X GET --header 'Accept: application/json' 'https://11.11.11.12/api/projects/100'
+// e.g. curl -X GET --header 'Accept: application/json' 'https://localhost/api/projects/100'
 func GetPrjByPrjID(baseURL string) {
 	targetURL := baseURL + "/" + strconv.Itoa(prjGet.ProjectID)
 	fmt.Println("==> GET", targetURL)
@@ -158,7 +158,7 @@ func GetPrjByPrjID(baseURL string) {
 // params:
 //  project_id - (REQUIRED) Project ID of project which will be deleted.
 //
-// e.g. curl -X DELETE --header 'Accept: text/plain' 'https://11.11.11.12/api/projects/100'
+// e.g. curl -X DELETE --header 'Accept: text/plain' 'https://localhost/api/projects/100'
 func DelPrjByPrjID(baseURL string) {
 	targetURL := baseURL + "/" + strconv.Itoa(prjDel.ProjectID)
 	fmt.Println("==> DELETE", targetURL)
@@ -184,7 +184,7 @@ func DelPrjByPrjID(baseURL string) {
 //  page - The page nubmer, default is 1.
 //  page_size - The size of per page, default is 10, maximum is 100.
 //
-// e.g. curl -X GET --header 'Accept: application/json' 'https://11.11.11.12/api/projects?name=prj&public=true&owner=moooofly&page=1&page_size=10'
+// e.g. curl -X GET --header 'Accept: application/json' 'https://localhost/api/projects?name=prj&public=true&owner=moooofly&page=1&page_size=10'
 func GetPrjsList(baseURL string) {
 	targetURL := baseURL + "?name=" + prjsList.Name +
 		"&public=" + prjsList.Public +

@@ -34,7 +34,7 @@ func (x *recentLogs) Execute(args []string) error {
 
 // GetOPLogs ...
 //
-// e.g. curl -X GET --header 'Accept: application/json' 'https://11.11.11.12/api/logs?username=admin&repository=prj2%2Fphoton&tag=v3&operation=push&begin_timestamp=20171102&page=1&page_size=10'
+// e.g. curl -X GET --header 'Accept: application/json' 'https://localhost/api/logs?username=admin&repository=prj2%2Fphoton&tag=v3&operation=push&begin_timestamp=20171102&page=1&page_size=10'
 func GetOPLogs(baseURL string) {
 	targetURL := baseURL + "?username=" + logs.Username +
 		"&repository=" + logs.Repository +

@@ -66,7 +66,7 @@ func (x *repositoryDel) Execute(args []string) error {
 //  page       - The page nubmer, default is 1.
 //  pageSize   - The size of per page, default is 10, maximum is 100.
 //
-// e.g. curl -X GET --header 'Accept: application/json' 'https://11.11.11.12/api/repositories?project_id=1&q=prj&page=1&page_size=10'
+// e.g. curl -X GET --header 'Accept: application/json' 'https://localhost/api/repositories?project_id=1&q=prj&page=1&page_size=10'
 func GetReposByPrjID(baseURL string) {
 	targetURL := baseURL + "?project_id=" + strconv.Itoa(reposList.ProjectID) +
 		"&q=" + reposList.RepoName +
@@ -91,7 +91,7 @@ func GetReposByPrjID(baseURL string) {
 // params:
 //  count - The number of the requested public repositories, default is 10 if not provided.
 //
-// e.g. curl -X GET --header 'Accept: application/json' 'https://11.11.11.12/api/repositories/top?count=3'
+// e.g. curl -X GET --header 'Accept: application/json' 'https://localhost/api/repositories/top?count=3'
 func GetTopRepos(baseURL string) {
 	targetURL := baseURL + "?count=" + strconv.Itoa(reposTop.Count)
 	fmt.Println("==> GET", targetURL)
@@ -104,7 +104,7 @@ func GetTopRepos(baseURL string) {
 // params:
 //  repo_name - (REQUIRED) The name of repository which will be deleted.
 //
-// e.g. curl -X DELETE --header 'Accept: text/plain' 'https://11.11.11.12/api/repositories/prj1%2Fhello-world'
+// e.g. curl -X DELETE --header 'Accept: text/plain' 'https://localhost/api/repositories/prj1%2Fhello-world'
 func DelRepoByRepoName(baseURL string) {
 	targetURL := baseURL + "/" + repodel.RepoName
 	fmt.Println("==> DELETE", targetURL)

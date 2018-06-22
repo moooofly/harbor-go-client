@@ -54,7 +54,7 @@ func (x *sysConfigReset) Execute(args []string) error {
 
 // GetSysConfig is for retrieving system configurations that only provides for admin user.
 //
-// e.g. curl -X GET --header 'Accept: application/json' 'https://11.11.11.12/api/configurations'
+// e.g. curl -X GET --header 'Accept: application/json' 'https://localhost/api/configurations'
 func GetSysConfig(baseURL string) {
 	targetURL := baseURL
 	fmt.Println("==> GET", targetURL)
@@ -99,7 +99,7 @@ func GetSysConfig(baseURL string) {
       "daily_time": 0
     }
   }
-}' 'https://11.11.11.12/api/configurations'
+}' 'https://localhost/api/configurations'
 */
 func PutSysConfigCreate(baseURL string) {
 	targetURL := baseURL
@@ -131,7 +131,7 @@ func PutSysConfigCreate(baseURL string) {
 
 // PostSysConfigReset resets system configurations from environment variables. Can only be accessed by admin user.
 //
-// e.g. curl -X POST --header 'Content-Type: application/json' --header 'Accept: text/plain' 'https://11.11.11.12/api/configurations/reset'
+// e.g. curl -X POST --header 'Content-Type: application/json' --header 'Accept: text/plain' 'https://localhost/api/configurations/reset'
 func PostSysConfigReset(baseURL string) {
 	targetURL := baseURL
 	fmt.Println("==> POST", targetURL)

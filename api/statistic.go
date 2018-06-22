@@ -25,7 +25,7 @@ func (x *statistics) Execute(args []string) error {
 
 // GetStats is aimed to statistic all of the projects number and repositories number relevant to the logined user, also the public projects number and repositories number. If the user is admin, he can also get total projects number and total repositories number.
 //
-// e.g. curl -X GET --header 'Accept: application/json' 'https://11.11.11.12/api/statistics'
+// e.g. curl -X GET --header 'Accept: application/json' 'https://localhost/api/statistics'
 func GetStats(baseURL string) {
 	targetURL := baseURL
 	fmt.Println("==> GET", targetURL)
