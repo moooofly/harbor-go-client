@@ -111,6 +111,11 @@ doLogin() {
     echo
     echo -e "$L1 --> login $END"
     echo
+
+    echo "----- build harbor-go-client for tesing -----"
+    go build -v ../
+    echo "-----------------\n\n"
+
     ./harbor-go-client login -u admin -p Harbor12345
     echo
 
@@ -130,6 +135,10 @@ doLogout() {
     echo "----- docker logout -----"
     docker logout $HARBOR_ADDR
     echo
+
+    echo "----- remove harbor-go-client -----"
+    rm harbor-go-client
+    echo "-----------------\n\n"
 }
 
 
