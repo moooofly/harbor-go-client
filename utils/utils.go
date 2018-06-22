@@ -24,8 +24,8 @@ var Parser = flags.NewParser(nil, flags.Default)
 // server's certificate chain and host name.
 var Request = gorequest.New().TLSClientConfig(&tls.Config{InsecureSkipVerify: true})
 
-var configfile = "./config.yaml"
-var secretfile = "./.cookie.yaml"
+var configfile = "conf/config.yaml"
+var secretfile = "conf/.cookie.yaml"
 var versionfile = "./VERSION"
 
 // Beegocookie is for beegosessionID storage
@@ -134,7 +134,7 @@ func CookieLoad() (*Beegocookie, error) {
 	return &cookie, nil
 }
 
-// SysConfigLoad loads system configuration from config.yaml.
+// SysConfigLoad loads system configuration from conf/config.yaml.
 func SysConfigLoad() (*SysConfig, error) {
 	var config SysConfig
 
@@ -151,7 +151,7 @@ func SysConfigLoad() (*SysConfig, error) {
 	return &config, nil
 }
 
-// generalConfigLoad load general configuration from config.yaml
+// generalConfigLoad load general configuration from conf/config.yaml
 func generalConfigLoad() (*generalConfig, error) {
 	var config generalConfig
 

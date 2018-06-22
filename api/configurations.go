@@ -13,7 +13,7 @@ func init() {
 		"This endpoint is for retrieving system configurations that only provides for admin user.",
 		&scGet)
 	utils.Parser.AddCommand("configurations_create",
-		"Modify system configurations. (set configuration in config.yaml)",
+		"Modify system configurations. (set configuration in conf/config.yaml)",
 		"This endpoint is for modifying system configurations that only provides for admin user.",
 		&scCreate)
 	utils.Parser.AddCommand("configurations_reset",
