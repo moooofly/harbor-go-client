@@ -374,7 +374,7 @@ retention_policy_test() {
     echo "===================================="
     echo
 
-    ./rp_repos.sh 10 10 10
+    ./rp_repos_simulation.sh 10 10 10
     echo "-----------------\n\n"
 }
 

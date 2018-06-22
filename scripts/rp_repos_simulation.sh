@@ -114,7 +114,9 @@ doLogin() {
 
     echo "----- build harbor-go-client for tesing -----"
     go build -v ../
-    echo "-----------------\n\n"
+    echo "-----------------"
+    echo
+    echo
 
     ./harbor-go-client login -u admin -p Harbor12345
     echo
@@ -138,7 +140,9 @@ doLogout() {
 
     echo "----- remove harbor-go-client -----"
     rm harbor-go-client
-    echo "-----------------\n\n"
+    echo "-----------------"
+    echo
+    echo
 }
 
 
