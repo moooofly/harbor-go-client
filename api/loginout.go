@@ -45,7 +45,7 @@ func (x *logout) Execute(args []string) error {
 // 	username - Current login username.
 //  password - Current login password.
 //
-// e.g. curl -X POST --header 'Content-Type: application/x-www-form-urlencoded;param=value' 'https://11.11.11.12/login' -i -k -d "principal=admin&password=Harbor12345"
+// e.g. curl -X POST --header 'Content-Type: application/x-www-form-urlencoded;param=value' 'https://localhost/login' -i -k -d "principal=admin&password=Harbor12345"
 func LoginHarbor(baseURL string) {
 
 	if li.Password == "" {
@@ -91,7 +91,7 @@ func LoginHarbor(baseURL string) {
 //
 // params:
 //
-// e.g. curl -X GET 'https://11.11.11.12/log_out' -i -k
+// e.g. curl -X GET 'https://localhost/log_out' -i -k
 func LogoutHarbor(baseURL string) {
 	targetURL := baseURL
 	fmt.Println("==> GET", targetURL)

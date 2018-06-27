@@ -26,7 +26,7 @@ func (x *search) Execute(args []string) error {
 
 // SearchPrjAndRepo returns information about the projects and repositories offered at public status or related to the current logged in user. The response includes the project and repository list in a proper display order.
 //
-// e.g. curl -X GET --header 'Accept: application/json' 'https://11.11.11.12/api/search?q=hello-world'
+// e.g. curl -X GET --header 'Accept: application/json' 'https://localhost/api/search?q=hello-world'
 func SearchPrjAndRepo(baseURL string) {
 	targetURL := baseURL + "?q=" + searching.Q
 	fmt.Println("==> GET", targetURL)

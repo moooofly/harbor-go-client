@@ -8,8 +8,9 @@ ERROR="\033[41;30;1m Error \033[0m"
 
 prepare() {
 
-    echo "----- build harbor-go-client for tesing -----"
+    echo "----- prepare harbor-go-client and conf/ for tesing -----"
     go build -v ../
+    cp -r ../conf .
     echo "-----------------\n\n"
 
     echo "----- docker login -----"
@@ -58,8 +59,9 @@ cleanup() {
     docker logout $HARBOR_ADDR
     echo "-----------------\n\n"
 
-    echo "----- remove harbor-go-client -----"
+    echo "----- remove harbor-go-client and conf/ -----"
     rm harbor-go-client
+    rm -r conf/
     echo "-----------------\n\n"
 }
 
@@ -161,7 +163,7 @@ full_api_tests() {
 
     # ----
 
-    echo "----- configurations_create (read system configuration from config.yaml) -----"
+    echo "----- configurations_create (read system configuration from conf/config.yaml) -----"
     ./harbor-go-client configurations_create && echo "${SUCCESS}" || echo "${ERROR}"
     echo "-----------------\n\n"
 
@@ -345,8 +347,9 @@ projects_test() {
 
 users_test() {
 
-    echo "----- build harbor-go-client for tesing -----"
+    echo "----- prepare harbor-go-client and conf/ for tesing -----"
     go build -v ../
+    cp -r ../conf .
     echo "-----------------\n\n"
 
     echo "----- harbor-go-client login -----"
@@ -361,8 +364,9 @@ users_test() {
     ./harbor-go-client logout && echo "${SUCCESS} Delete .cookie.yaml" || echo "${ERROR}"
     echo "-----------------\n\n"
 
-    echo "----- remove harbor-go-client -----"
+    echo "----- remove harbor-go-client and conf/ -----"
     rm harbor-go-client
+    rm -r conf/
     echo "-----------------\n\n"
 }
 

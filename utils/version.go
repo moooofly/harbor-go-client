@@ -1,17 +1,13 @@
 package utils
 
 import (
-	"bufio"
 	"fmt"
-	"os"
-	"runtime"
-	"strings"
 )
 
 func init() {
 	Parser.AddCommand("version",
 		"Show version info.",
-		"Format: <client-version> (<golang-runtime-version> on <GOOS>/<GOARCH>; <Compiler>)",
+		"Show version infos as \"| Type | Value |\"",
 		&verinfo)
 }
 
@@ -25,27 +21,15 @@ func (x *verInfo) Execute(args []string) error {
 	return nil
 }
 
-func version() string {
-
-	f, err := os.Open(versionfile)
-	if err != nil {
-		fmt.Println("error:", err)
-		return ""
-	}
-	defer f.Close()
-
-	reader := bufio.NewReader(f)
-	v, err := reader.ReadString('\n')
-	if err != nil {
-		fmt.Println("error:", err)
-		return ""
-	}
-
-	return fmt.Sprintf("%s (%s on %s/%s; %s)",
-		strings.Trim(v, "\n"), runtime.Version(), runtime.GOOS, runtime.GOARCH, runtime.Compiler)
-}
-
 // PrintVersion print version info.
 func PrintVersion() {
-	fmt.Println(version())
+	PrintLogo()
+	fmt.Println("+----------------------+------------------------------------------+")
+	fmt.Printf("| % -20s | % -40s |\n", "Client Version", ClientVersion)
+	fmt.Printf("| % -20s | % -40s |\n", "Go Version", GoVersion)
+	fmt.Printf("| % -20s | % -40s |\n", "UTC Build Time", UTCBuildTime)
+	fmt.Printf("| % -20s | % -40s |\n", "Git Branch", GitBranch)
+	fmt.Printf("| % -20s | % -40s |\n", "Git Tag", GitTag)
+	fmt.Printf("| % -20s | % -40s |\n", "Git Hash", GitHash)
+	fmt.Println("+----------------------+------------------------------------------+")
 }

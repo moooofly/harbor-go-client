@@ -148,7 +148,7 @@ func (x *targetsPoliciesByID) Execute(args []string) error {
 // params:
 //  name - The replication's target name (for filter).
 //
-// e.g. curl -X GET --header 'Accept: application/json' 'https://11.11.11.12/api/targets?name=remote'
+// e.g. curl -X GET --header 'Accept: application/json' 'https://localhost/api/targets?name=remote'
 func GetTargetsList(baseURL string) {
 	targetURL := baseURL + "?name=" + tl.Name
 	fmt.Println("==> GET", targetURL)
@@ -182,7 +182,7 @@ curl -X POST --header 'Content-Type: text/plain' --header 'Accept: text/plain' -
   "username": "admin",
   "password": "Harbor12345",
   "insecure": true
-}' 'https://11.11.11.12/api/targets'
+}' 'https://localhost/api/targets'
 */
 func PostTargetsCreate(baseURL string) {
 	targetURL := baseURL
@@ -222,7 +222,7 @@ curl -X POST --header 'Content-Type: text/plain' --header 'Accept: text/plain' -
   "username": "admin",
   "password": "Harbor12345",
   "insecure": true
-}' 'https://11.11.11.12/api/targets/ping'
+}' 'https://localhost/api/targets/ping'
 */
 func PostTargetsPing(baseURL string) {
 	targetURL := baseURL
@@ -252,7 +252,7 @@ func PostTargetsPing(baseURL string) {
 // params:
 //  id - (REQUIRED) The replication's target ID.
 //
-// e.g. curl -X POST --header 'Content-Type: application/json' --header 'Accept: text/plain' 'https://11.11.11.12/api/targets/1/ping'
+// e.g. curl -X POST --header 'Content-Type: application/json' --header 'Accept: text/plain' 'https://localhost/api/targets/1/ping'
 func PostTargetsPingByID(baseURL string) {
 	targetURL := baseURL + "/" + strconv.Itoa(tpingByID.ID) + "/ping"
 	fmt.Println("==> POST", targetURL)
@@ -274,7 +274,7 @@ func PostTargetsPingByID(baseURL string) {
 // params:
 //  id - (REQUIRED) The replication's target ID.
 //
-// e.g. curl -X DELETE --header 'Accept: text/plain' 'https://11.11.11.12/api/targets/2'
+// e.g. curl -X DELETE --header 'Accept: text/plain' 'https://localhost/api/targets/2'
 func DeleteTargetsByID(baseURL string) {
 	targetURL := baseURL + "/" + strconv.Itoa(tdByID.ID)
 	fmt.Println("==> DELETE", targetURL)
@@ -296,7 +296,7 @@ func DeleteTargetsByID(baseURL string) {
 // params:
 //  id - (REQUIRED) The replication's target ID.
 //
-// e.g. curl -X GET --header 'Accept: application/json' 'https://11.11.11.12/api/targets/1'
+// e.g. curl -X GET --header 'Accept: application/json' 'https://localhost/api/targets/1'
 func GetTargetsByID(baseURL string) {
 	targetURL := baseURL + "/" + strconv.Itoa(tgByID.ID)
 	fmt.Println("==> GET", targetURL)
@@ -331,7 +331,7 @@ curl -X PUT --header 'Content-Type: text/plain' --header 'Accept: text/plain' -d
   "username": "admin",
   "password": "12345",
   "insecure": true
-}' 'https://11.11.11.12/api/targets/4'
+}' 'https://localhost/api/targets/4'
 */
 func UpdateTargetsByID(baseURL string) {
 	targetURL := baseURL + "/" + strconv.Itoa(tuByID.ID)
@@ -363,7 +363,7 @@ func UpdateTargetsByID(baseURL string) {
 // params:
 //  id - (REQUIRED) The replication's target ID.
 //
-// e.g. curl -X GET --header 'Accept: application/json' 'https://11.11.11.12/api/targets/1/policies/'
+// e.g. curl -X GET --header 'Accept: application/json' 'https://localhost/api/targets/1/policies/'
 func GetPoliciesByID(baseURL string) {
 	targetURL := baseURL + "/" + strconv.Itoa(tpoliciesByID.ID) + "/policies/"
 	fmt.Println("==> GET", targetURL)
