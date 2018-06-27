@@ -27,7 +27,9 @@ func (x *usersList) Execute(args []string) error {
 
 // GetUsers gets the current user information.
 //
-// e.g. curl -X GET --header 'Accept: application/json' 'https://11.11.11.12/api/users/current?api_key=top'
+// GET /users/current
+//
+// e.g. curl -X GET --header 'Accept: application/json' 'https://localhost/api/users/current?api_key=top'
 func GetUsers(baseURL string) {
 	targetURL := baseURL + "/current" + "?api_key=" + userslist.Apikey
 	fmt.Println("==> GET", targetURL)

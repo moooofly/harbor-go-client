@@ -107,13 +107,14 @@ retention_policy_test() {
     docker rmi -f $(docker images hello-world -q)
 }
 
-doLogin() {
+prepare() {
     echo
     echo -e "$L1 --> login $END"
     echo
 
-    echo "----- build harbor-go-client for tesing -----"
+    echo "----- prepare harbor-go-client and conf/ for tesing -----"
     go build -v ../
+    cp -r ../conf .
     echo "-----------------"
     echo
     echo
@@ -127,7 +128,7 @@ doLogin() {
 
 }
 
-doLogout() {
+cleanup() {
     echo
     echo -e "$L1 --> logout $END"
     echo
@@ -138,8 +139,9 @@ doLogout() {
     docker logout $HARBOR_ADDR
     echo
 
-    echo "----- remove harbor-go-client -----"
+    echo "----- remove harbor-go-client and conf/ -----"
     rm harbor-go-client
+    rm -r conf/
     echo "-----------------"
     echo
     echo
@@ -152,9 +154,9 @@ if [ $# -ne 3 ] ; then
     help
 fi
 
-doLogin
+prepare
 retention_policy_test
-doLogout
+cleanup
 
 
 

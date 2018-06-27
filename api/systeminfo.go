@@ -53,7 +53,7 @@ func (x *sysInfoRootCert) Execute(args []string) error {
 
 // GetSysGeneral is for retrieving general system info, this can be called by anonymous request.
 //
-// e.g. curl -X GET --header 'Accept: application/json' 'https://11.11.11.12/api/systeminfo'
+// e.g. curl -X GET --header 'Accept: application/json' 'https://localhost/api/systeminfo'
 func GetSysGeneral(baseURL string) {
 	targetURL := baseURL
 	fmt.Println("==> GET", targetURL)
@@ -65,7 +65,7 @@ func GetSysGeneral(baseURL string) {
 
 // GetSysVolumes is for retrieving system volume info that only provides for admin user.
 //
-// e.g. curl -X GET --header 'Accept: application/json' 'https://11.11.11.12/api/systeminfo/volumes'
+// e.g. curl -X GET --header 'Accept: application/json' 'https://localhost/api/systeminfo/volumes'
 func GetSysVolumes(baseURL string) {
 	targetURL := baseURL
 	fmt.Println("==> GET", targetURL)
@@ -83,7 +83,7 @@ func GetSysVolumes(baseURL string) {
 
 // GetSysRootCert is for downloading a default root certificate that only provides for admin user under OVA deployment.
 //
-// e.g. curl -X GET --header 'Accept: text/plain' 'https://11.11.11.12/api/systeminfo/getcert'
+// e.g. curl -X GET --header 'Accept: text/plain' 'https://localhost/api/systeminfo/getcert'
 func GetSysRootCert(baseURL string) {
 	targetURL := baseURL
 	fmt.Println("==> GET", targetURL)
