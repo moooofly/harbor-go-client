@@ -5,10 +5,8 @@ ifeq "$(GOPATH)" ""
   $(error Please set the environment variable GOPATH before running `make`)
 endif
 
-
 GO        := go
 GOBUILD   := CGO_ENABLED=0 $(GO) build $(BUILD_FLAG)
-
 
 LDFLAGS += -X "github.com/moooofly/harbor-go-client/utils.ClientVersion=$(shell cat VERSION)"
 LDFLAGS += -X "github.com/moooofly/harbor-go-client/utils.GoVersion=$(shell go version)"
@@ -20,9 +18,11 @@ LDFLAGS += -X "github.com/moooofly/harbor-go-client/utils.GitHash=$(shell git re
 all: lint build test
 
 build:
+	@echo "==> Building ..."
 	$(GOBUILD) -ldflags '$(LDFLAGS)' ./
 
 install:
+	@echo "==> Installing ..."
 	$(GO) install -x ${SRC}
 
 lint:
@@ -30,7 +30,14 @@ lint:
 	find . -name '*.go' -not -path "./vendor/*" | xargs gofmt -w -s
 
 test:
+	@echo "==> Testing ..."
 	$(GO) test ${SRC}
+
+pack: build
+	@echo "==> Packing ..."
+	@tar czvf $(shell cat VERSION)-bin.tar.gz harbor-go-client conf/*.yaml
+	@echo ""
+	@rm harbor-go-client
 
 misspell:
 	# misspell - requires that the following be run first:
@@ -38,6 +45,8 @@ misspell:
 	find . -name '*.go' -not -path './vendor/*' -not -path './_repos/*' | xargs misspell -error
 
 clean:
+	@echo "==> Cleaning ..."
 	$(GO) clean -x -i ${SRC}
 	rm -rf *.out
+	rm -rf *.tar.gz
 
