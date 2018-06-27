@@ -14,6 +14,16 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
+// These variables are populated via the Go linker.
+var (
+	UTCBuildTime  = "unknown"
+	ClientVersion = "unknown"
+	GoVersion     = "unknown"
+	GitBranch     = "unknown"
+	GitTag        = "unknown"
+	GitHash       = "unknown"
+)
+
 var errMalCookies = errors.New("get malformed cookies")
 var errCookiesNotAvailable = errors.New("target cookies are not available")
 
@@ -26,7 +36,6 @@ var Request = gorequest.New().TLSClientConfig(&tls.Config{InsecureSkipVerify: tr
 
 var configfile = "conf/config.yaml"
 var secretfile = "conf/.cookie.yaml"
-var versionfile = "./VERSION"
 
 // Beegocookie is for beegosessionID storage
 type Beegocookie struct {
