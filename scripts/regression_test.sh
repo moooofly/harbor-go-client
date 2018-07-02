@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 HARBOR_ADDR=localhost
 PRJ_NAME=tmp
 
@@ -459,7 +461,3 @@ case "$OPTION" in
 esac
 
 exit 0
-
-
-
-
