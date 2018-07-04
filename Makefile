@@ -6,6 +6,7 @@ ifeq "$(GOPATH)" ""
 endif
 
 GO        := go
+PKGS      := $(shell $(GO) list ./... | grep -v vendor)
 GOBUILD   := CGO_ENABLED=0 $(GO) build $(BUILD_FLAG)
 
 LDFLAGS += -X "github.com/moooofly/harbor-go-client/utils.ClientVersion=$(shell cat VERSION)"
@@ -31,7 +32,7 @@ lint:
 
 test:
 	@echo "==> Testing ..."
-	$(GO) test ${SRC}
+	$(GO) test -short -race $(PKGS)
 
 pack: build
 	@echo "==> Packing ..."
