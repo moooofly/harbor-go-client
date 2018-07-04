@@ -39,6 +39,9 @@ pack: build
 	@echo ""
 	@rm harbor-go-client
 
+docker:
+	docker build -t harbor-go-client:$(shell git rev-parse --short HEAD) .
+
 misspell:
 	# misspell - requires that the following be run first:
 	#    go get -u github.com/client9/misspell/cmd/misspell
