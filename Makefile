@@ -48,6 +48,10 @@ misspell:
 	#    go get -u github.com/client9/misspell/cmd/misspell
 	find . -name '*.go' -not -path './vendor/*' -not -path './_repos/*' | xargs misspell -error
 
+shellcheck:
+	# apt-get install -y shellcheck
+	shellcheck ./scripts/*.sh
+
 clean:
 	@echo "==> Cleaning ..."
 	$(GO) clean -x -i ${SRC}
