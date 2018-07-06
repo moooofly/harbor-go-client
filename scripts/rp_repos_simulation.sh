@@ -37,14 +37,14 @@ retention_policy_test() {
     # 1. create $PRJS_NUM projects for test
     echo -e "$L1 --> create $PRJS_NUM projects for test $END"
     echo
-    for (( i=1; i<=$PRJS_NUM; i++ ))
+    for (( i=1; i<=PRJS_NUM; i++ ))
     do
         # create both public and private projects
-        if (( i % 2 == 0 )) ; then
-            PUBLIC=1
-        else
-            PUBLIC=0
-        fi
+        #if (( i % 2 == 0 )) ; then
+        #    PUBLIC=1
+        #else
+        #    PUBLIC=0
+        #fi
 
         echo
         #echo -e "$L2 ----> create: project_name=${PROJECT_NAME}_$i   public=${PUBLIC} $END"
@@ -53,7 +53,7 @@ retention_policy_test() {
         #./harbor-go-client prj_create --project_name="${PROJECT_NAME}_$i" --public=${PUBLIC}
         ./harbor-go-client prj_create --project_name="${PROJECT_NAME}_$i" --public=1
 
-		rands=$((RANDOM % $TAGS_NUM))
+		rands=$((RANDOM % TAGS_NUM))
         echo
         echo -e "$L2 ----> generate a random number ($rands) of tags and push onto Harbor $END"
         echo
@@ -61,16 +61,16 @@ retention_policy_test() {
 		for r in $(seq $rands)
 		do
             # 2. create tags, push repos and tags
-			docker tag hello-world:latest ${HARBOR_ADDR}/${PROJECT_NAME}_${i}/hello-world:v${r}
-			docker push ${HARBOR_ADDR}/${PROJECT_NAME}_${i}/hello-world:v${r} >/dev/null && echo "docker push ${HARBOR_ADDR}/${PROJECT_NAME}_${i}/hello-world:v${r}" || echo "Failed"
+			docker tag hello-world:latest ${HARBOR_ADDR}/${PROJECT_NAME}_${i}/hello-world:v"$r"
+			docker push "${HARBOR_ADDR}/${PROJECT_NAME}_${i}/hello-world:v$r" >/dev/null && echo "docker push ${HARBOR_ADDR}/${PROJECT_NAME}_${i}/hello-world:v${r}" || echo "Failed"
 
     		# 3. make a random number of pull
-            loop=$((RANDOM % $PULL_NUM))
+            loop=$((RANDOM % PULL_NUM))
         	echo -e "$L3 ----> pull ${PROJECT_NAME}_${i}/hello-world:v${r} random times ($loop) $END"
 			echo
-            for j in $(seq $loop)
+            for _ in $(seq $loop)
             do
-			    docker pull ${HARBOR_ADDR}/${PROJECT_NAME}_${i}/hello-world:v${r} >/dev/null
+			    docker pull ${HARBOR_ADDR}/${PROJECT_NAME}_${i}/hello-world:v"$r" >/dev/null
             done
 		done
     done
@@ -97,14 +97,14 @@ retention_policy_test() {
     IDS=$(./harbor-go-client prjs_list --name=${PROJECT_NAME} | grep "project_id" | awk '{print $2}' | sed -r 's/,//g')
 	for id in $IDS
 	do
-    	./harbor-go-client prj_del --project_id=${id}
+    	./harbor-go-client prj_del --project_id="$id"
         echo
 	done
 
     # 7. delete local docker tags and images
     echo -e "$L1 --> delete all tags and images created locally $END"
     echo
-    docker rmi -f $(docker images hello-world -q)
+    docker rmi -f "$(docker images hello-world -q)"
 }
 
 prepare() {

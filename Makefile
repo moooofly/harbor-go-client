@@ -6,6 +6,7 @@ ifeq "$(GOPATH)" ""
 endif
 
 GO        := go
+PKGS      := $(shell $(GO) list ./... | grep -v vendor)
 GOBUILD   := CGO_ENABLED=0 $(GO) build $(BUILD_FLAG)
 
 LDFLAGS += -X "github.com/moooofly/harbor-go-client/utils.ClientVersion=$(shell cat VERSION)"
@@ -31,7 +32,7 @@ lint:
 
 test:
 	@echo "==> Testing ..."
-	$(GO) test ${SRC}
+	$(GO) test -short -race $(PKGS)
 
 pack: build
 	@echo "==> Packing ..."
@@ -39,10 +40,17 @@ pack: build
 	@echo ""
 	@rm harbor-go-client
 
+docker:
+	docker build -t harbor-go-client:$(shell git rev-parse --short HEAD) .
+
 misspell:
 	# misspell - requires that the following be run first:
 	#    go get -u github.com/client9/misspell/cmd/misspell
 	find . -name '*.go' -not -path './vendor/*' -not -path './_repos/*' | xargs misspell -error
+
+shellcheck:
+	# apt-get install -y shellcheck
+	shellcheck ./scripts/*.sh
 
 clean:
 	@echo "==> Cleaning ..."
