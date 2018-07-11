@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.8.0 (2018-7-11)
+
+### New Features
+
+### Improvements
+
+### Bug Fixes
+
+* Fix compatibility issue derived from harbor v1.3.0. close #2
+
 ## v0.7.0 (2018-7-6)
 
 ### New Features
