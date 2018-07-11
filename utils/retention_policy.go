@@ -46,7 +46,7 @@ var repos []*repoTop
 type repoSearch struct {
 	ProjectID      int    `json:"project_id"`
 	ProjectName    string `json:"project_name"`
-	ProjectPublic  int    `json:"project_public"`
+	ProjectPublic  bool   `json:"project_public"`
 	PullCount      int    `json:"pull_count"`
 	RepositoryName string `json:"repository_name"`
 	TagsCount      int    `json:"tags_count"`
@@ -118,9 +118,9 @@ func (x *tagsRetentionPolicy) Execute(args []string) error {
 }
 
 func tagAnalyseAndErase() error {
-	fmt.Println("=========================")
-	fmt.Println("==  开始 tags RP 分析  ==")
-	fmt.Println("=========================")
+	fmt.Println("===============================")
+	fmt.Println("==  Start tags RP Analysing  ==")
+	fmt.Println("===============================")
 	fmt.Println()
 
 	c, err := CookieLoad()
@@ -233,7 +233,7 @@ func tagAnalyseAndErase() error {
 		}
 	}
 
-	fmt.Printf("\n=== 完成 tags RP 分析 ===\n\n")
+	fmt.Printf("\n=== Finish tags RP Analysing ===\n\n")
 
 	return nil
 }
@@ -482,7 +482,7 @@ func repoErase() error {
 		return fmt.Errorf("error: the number is out of range")
 	}
 
-	fmt.Printf("\n=== 开始 soft deletion ===\n\n")
+	fmt.Printf("\n=== Start soft deletion ===\n\n")
 
 	for num > 0 {
 		if minh.Len() > 0 {
@@ -508,7 +508,7 @@ func repoErase() error {
 		num--
 	}
 
-	fmt.Printf("\n=== 完成 soft deletion ===\n\n")
+	fmt.Printf("\n=== Finish soft deletion ===\n\n")
 	return nil
 }
 
