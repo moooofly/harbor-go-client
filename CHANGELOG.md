@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.9.0 (2018-7-23)
+
+### New Features
+
+* Add all users APIs
+
+### Improvements
+
+### Bug Fixes
+
 ## v0.8.0 (2018-7-11)
 
 ### New Features
