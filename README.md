@@ -47,14 +47,14 @@ Current Harbor API support status:
 - statistics
     - [x] GET /api/statistics
 - users
-    - [ ] GET /api/users
-    - [ ] POST /api/users
+    - [x] GET /api/users
+    - [x] POST /api/users
     - [x] GET /api/users/current
-    - [ ] DELETE /api/users/{user_id}
-    - [ ] GET /api/users/{user_id}
-    - [ ] PUT /api/users/{user_id}
-    - [ ] PUT /api/users/{user_id}/password
-    - [ ] PUT /api/users/{user_id}/sysadmin
+    - [x] DELETE /api/users/{user_id}
+    - [x] GET /api/users/{user_id}
+    - [x] PUT /api/users/{user_id}
+    - [x] PUT /api/users/{user_id}/password
+    - [x] PUT /api/users/{user_id}/sysadmin
 - repositories
     - [x] GET /api/repositories
     - [x] DELETE /api/repositories/{repo_name}
