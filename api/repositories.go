@@ -10,9 +10,13 @@ import (
 )
 
 func init() {
+	utils.Parser.AddCommand("repo_image_label_add",
+		"Add a label to the image under specific repository.",
+		"This endpoint adds a label to the image under specific repository.",
+		&repoImageLabelAdd)
 	utils.Parser.AddCommand("repo_image_labels_get",
 		"Get labels of an image under specific repository.",
-		"This endpoint gets labels of an image specified by the repo_name and tag.",
+		"This endpoint gets labels of an image under specific repository specified by the repo_name and tag.",
 		&repoImageLabelsGet)
 	utils.Parser.AddCommand("repo_label_del",
 		"Delete a label from the repository.",
@@ -42,6 +46,87 @@ func init() {
 		"Get public repositories which are accessed most.",
 		"This endpoint aims to let users see the most popular public repositories",
 		&reposTop)
+}
+
+type repositoryImageLabelAdd struct {
+	RepoName     string `short:"n" long:"repo_name" description:"(REQUIRED) The name of repository that you want to add a label." required:"yes"`
+	Tag          string `short:"t" long:"tag" description:"(REQUIRED) The tag of the image." required:"yes"`
+	ID           int    `short:"i" long:"id" description:"(REQUIRED) The ID of the already existing label." required:"yes" json:"id"`
+	Name         string `long:"name" description:"The name of this label." default:"" json:"name"`
+	Description  string `long:"description" description:"The description of this label." default:"" json:"description"`
+	Color        string `long:"color" description:"The color code of this label. (e.g. Format: #A9B6BE)" default:"" json:"color"`
+	Scope        string `long:"scope" description:"The scope of this label. ('p' indicats project scope, 'g' indicates global scope)" default:"" json:"scope"`
+	ProjectID    int    `long:"project_id" description:"Which project (id) this label belongs to when created. ('0' indicates global label, others indicate specific project)" default:"" json:"project_id"`
+	CreationTime string `long:"creation_time" description:"The creation time of this label. default time.Now()" default:"" json:"creation_time"`
+	UpdateTime   string `long:"update_time" description:"The update time of this label. default time.Now()" default:"" json:"update_time"`
+	Deleted      bool   `long:"deleted" description:"not sure" json:"deleted"`
+}
+
+var repoImageLabelAdd repositoryImageLabelAdd
+
+func (x *repositoryImageLabelAdd) Execute(args []string) error {
+	PostRepoImageLabelAdd(utils.URLGen("/api/repositories"))
+	return nil
+}
+
+// PostRepoImageLabelAdd adds a label to the image under specific repository.
+//
+// params:
+//   repo_name     - (REQUIRED) The name of repository that you want to add a label.
+//   tag           - (REQUIRED) The tag of the image.
+//   id            - (REQUIRED) The ID of the already existing label.
+//   name          - The name of this label.
+//   description   - The description of this label.
+//   color         - The color code of this label. (e.g. Format: #A9B6BE)
+//   scope         - The scope of this label. ('p' indicats project scope, 'g' indicates global scope)
+//   project_id    - Which project (id) this label belongs to when created. ('0' indicates global label, others indicate specific project)
+//   creation_time - The creation time of this label. default time.Now()
+//   update_time   - The update time of this label. default time.Now()
+//   deleted       - not sure
+//
+// format:
+//   POST /repositories/{repo_name}/tags/{tag}/labels
+/*
+curl -X POST --header 'Content-Type: application/json' --header 'Accept: text/plain' -d '{ \
+   "id": 3, \
+   "name": "test-name", \
+   "description": "test-description", \
+   "color": "test-color", \
+   "scope": "test-scope", \
+   "project_id": 10, \
+   "deleted": true \
+ }' 'https://localhost/api/repositories/temp_3%2Fhello-world/tags/v1/labels'
+*/
+func PostRepoImageLabelAdd(baseURL string) {
+	if repoImageLabelAdd.CreationTime == "" || repoImageLabelAdd.UpdateTime == "" {
+		now := time.Now().Format("2006-01-02T15:04:05Z")
+		repoImageLabelAdd.CreationTime = now
+		repoImageLabelAdd.UpdateTime = now
+	}
+
+	targetURL := baseURL + "/" + repoImageLabelAdd.RepoName +
+		"/tags/" + repoImageLabelAdd.Tag + "/labels"
+	fmt.Println("==> POST", targetURL)
+
+	// Read beegosessionID from .cookie.yaml
+	c, err := utils.CookieLoad()
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	t, err := json.Marshal(&repoImageLabelAdd)
+	if err != nil {
+		fmt.Println("error:", err)
+		return
+	}
+
+	fmt.Println("==> label add:", string(t))
+
+	utils.Request.Post(targetURL).
+		Set("Cookie", "harbor-lang=zh-cn; beegosessionID="+c.BeegosessionID).
+		Send(string(t)).
+		End(utils.PrintStatus)
 }
 
 type repositoryImageLabelsGet struct {
