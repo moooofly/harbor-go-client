@@ -10,6 +10,10 @@ import (
 )
 
 func init() {
+	utils.Parser.AddCommand("repo_image_label_del",
+		"Delete label from the image under specific repository.",
+		"This endpoint deletes the label from the image specified by the repo_name and tag.",
+		&repoImageLabelDel)
 	utils.Parser.AddCommand("repo_image_label_add",
 		"Add a label to the image under specific repository.",
 		"This endpoint adds a label to the image under specific repository.",
@@ -46,6 +50,45 @@ func init() {
 		"Get public repositories which are accessed most.",
 		"This endpoint aims to let users see the most popular public repositories",
 		&reposTop)
+}
+
+type repositoryImageLabelDel struct {
+	RepoName string `short:"n" long:"repo_name" description:"(REQUIRED) The name of repository." required:"yes"`
+	Tag      string `short:"t" long:"tag" description:"(REQUIRED) The tag of the image." required:"yes"`
+	LabelID  int    `short:"i" long:"label_id" description:"(REQUIRED) The ID of label." required:"yes"`
+}
+
+var repoImageLabelDel repositoryImageLabelDel
+
+func (x *repositoryImageLabelDel) Execute(args []string) error {
+	DeleteRepoImageLabel(utils.URLGen("/api/repositories"))
+	return nil
+}
+
+// DeleteRepoImageLabel deletes the label from the image specified by the repo_name and tag.
+//
+// params:
+//   repo_name - (REQUIRED) The name of repository.
+//   tag       - (REQUIRED) The tag of the image.
+//   id        - (REQUIRED) The ID of label.
+//
+// e.g. curl -X DELETE --header 'Accept: text/plain' 'https://localhost/api/repositories/temp_3%2Fhello-world/tags/v1/labels/2'
+func DeleteRepoImageLabel(baseURL string) {
+	targetURL := baseURL + "/" + repoImageLabelDel.RepoName +
+		"/tags/" + repoImageLabelDel.Tag +
+		"/labels/" + strconv.Itoa(repoImageLabelDel.LabelID)
+	fmt.Println("==> DELETE", targetURL)
+
+	// Read beegosessionID from .cookie.yaml
+	c, err := utils.CookieLoad()
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	utils.Request.Delete(targetURL).
+		Set("Cookie", "harbor-lang=zh-cn; beegosessionID="+c.BeegosessionID).
+		End(utils.PrintStatus)
 }
 
 type repositoryImageLabelAdd struct {
