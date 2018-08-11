@@ -10,6 +10,14 @@ import (
 )
 
 func init() {
+	utils.Parser.AddCommand("repo_image_labels_get",
+		"Get labels of an image under specific repository.",
+		"This endpoint gets labels of an image specified by the repo_name and tag.",
+		&repoImageLabelsGet)
+	utils.Parser.AddCommand("repo_label_del",
+		"Delete a label from the repository.",
+		"This endpoint deletes the label from the repository specified by the repo_name.",
+		&repoLabelDel)
 	utils.Parser.AddCommand("repo_label_add",
 		"Add a label to the repository.",
 		"This endpoint adds an already existing label (global or project specific) to the repository.",
@@ -34,6 +42,72 @@ func init() {
 		"Get public repositories which are accessed most.",
 		"This endpoint aims to let users see the most popular public repositories",
 		&reposTop)
+}
+
+type repositoryImageLabelsGet struct {
+	RepoName string `short:"n" long:"repo_name" description:"(REQUIRED) The name of repository." required:"yes"`
+	Tag      string `short:"t" long:"tag" description:"(REQUIRED) The tag of the image." required:"yes"`
+}
+
+var repoImageLabelsGet repositoryImageLabelsGet
+
+func (x *repositoryImageLabelsGet) Execute(args []string) error {
+	GetRepoImageLabel(utils.URLGen("/api/repositories"))
+	return nil
+}
+
+// GetRepoImageLabel gets labels of an image specified by the repo_name and tag.
+//
+// params:
+//   repo_name - (REQUIRED) The name of repository.
+//   tag       - (REQUIRED) The tag of the image.
+//
+// format:
+//   GET /repositories/{repo_name}/tags/{tag}/labels
+//
+// e.g. curl -X GET --header 'Accept: application/json' 'https://localhost/api/repositories/temp_3%2Fhello-world/tags/v1/labels'
+func GetRepoImageLabel(baseURL string) {
+	targetURL := baseURL + "/" + repoImageLabelsGet.RepoName +
+		"/tags/" + repoImageLabelsGet.Tag + "/labels"
+	fmt.Println("==> GET", targetURL)
+
+	utils.Request.Get(targetURL).End(utils.PrintStatus)
+}
+
+type repositoryLabelDel struct {
+	RepoName string `short:"n" long:"repo_name" description:"(REQUIRED) The name of repository that you want to delete a label from." required:"yes"`
+	ID       int    `short:"i" long:"id" description:"(REQUIRED) The ID of label." required:"yes"`
+}
+
+var repoLabelDel repositoryLabelDel
+
+func (x *repositoryLabelDel) Execute(args []string) error {
+	DeleteRepoLabel(utils.URLGen("/api/repositories"))
+	return nil
+}
+
+// DelRepoByRepoName deletes the label from the repository specified by the repo_name.
+//
+// params:
+//   repo_name - (REQUIRED) The name of repository that you want to delete a label from.
+//   id        - (REQUIRED) The ID of label.
+//
+// e.g. curl -X DELETE --header 'Accept: text/plain' 'https://localhost/api/repositories/temp_3%2Fhello-world/labels/2'
+func DeleteRepoLabel(baseURL string) {
+	targetURL := baseURL + "/" + repoLabelDel.RepoName +
+		"/labels/" + strconv.Itoa(repoLabelDel.ID)
+	fmt.Println("==> DELETE", targetURL)
+
+	// Read beegosessionID from .cookie.yaml
+	c, err := utils.CookieLoad()
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	utils.Request.Delete(targetURL).
+		Set("Cookie", "harbor-lang=zh-cn; beegosessionID="+c.BeegosessionID).
+		End(utils.PrintStatus)
 }
 
 type repositoryLabelAdd struct {
