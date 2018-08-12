@@ -58,20 +58,20 @@ Current Harbor API support status:
 - repositories
     - [x] GET /api/repositories
     - [x] DELETE /api/repositories/{repo_name}
-    - [ ] PUT /api/repositories/{repo_name}
-    - [ ] GET /api/repositories/{repo_name}/labels
-    - [ ] POST /api/repositories/{repo_name}/labels
-    - [ ] DELETE /api/repositories/{repo_name}/labels/{label_id}
+    - [x] PUT /api/repositories/{repo_name}
+    - [x] GET /api/repositories/{repo_name}/labels
+    - [x] POST /api/repositories/{repo_name}/labels
+    - [x] DELETE /api/repositories/{repo_name}/labels/{label_id}
     - [x] DELETE /api/repositories/{repo_name}/tags/{tag}
     - [x] GET /api/repositories/{repo_name}/tags/{tag}
     - [x] GET /api/repositories/{repo_name}/tags
-    - [ ] GET /api/repositories/{repo_name}/tags/{tag}/labels
-    - [ ] POST /api/repositories/{repo_name}/tags/{tag}/labels
-    - [ ] DELETE /api/repositories/{repo_name}/tags/{tag}/labels/{label_id}
-    - [ ] GET /api/repositories/{repo_name}/tags/{tag}/manifest
+    - [x] GET /api/repositories/{repo_name}/tags/{tag}/labels
+    - [x] POST /api/repositories/{repo_name}/tags/{tag}/labels
+    - [x] DELETE /api/repositories/{repo_name}/tags/{tag}/labels/{label_id}
+    - [x] GET /api/repositories/{repo_name}/tags/{tag}/manifest
     - [ ] POST /api/repositories/{repo_name}/tags/{tag}/scan
     - [ ] GET /api/repositories/{repo_name}/tags/{tag}/vulnerability/details
-    - [ ] GET /repositories/{repo_name}/signatures
+    - [x] GET /repositories/{repo_name}/signatures
     - [x] GET /api/repositories/top
 - logs
     - [x] GET /api/logs
