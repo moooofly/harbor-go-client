@@ -13,8 +13,10 @@
 * **api:** add api/doc.go for golang docs ([928c691](https://github.com/moooofly/harbor-go-client/commit/928c691))
 
 
+----------
 
-# Changelog
+
+# Changelog (legacy fasion)
 
 ## v0.9.0 (2018-7-23)
 
