@@ -10,6 +10,22 @@ import (
 )
 
 func init() {
+	utils.Parser.AddCommand("repo_signature_get",
+		"Get signature information of a repository from notary instance.",
+		"This endpoint aims to retrieve signature information of a repository, the data is from the nested notary instance of Harbor. If the repository does not have any signature information in notary, this API will return an empty list with response code 200, instead of 404",
+		&repoSignatureGet)
+	utils.Parser.AddCommand("repo_image_vul_details_get",
+		"Get vulnerability details of the image. (not support yet)",
+		"Call Clair API to get the vulnerability based on the previous successful scan.",
+		&repoImageVulDetailsGet)
+	utils.Parser.AddCommand("repo_image_scan",
+		"Scan the image. (not support yet)",
+		"Trigger jobservice to call Clair API to scan the image identified by the repo_name and tag. Only project admins have permission to scan images under the project.",
+		&repoImageScan)
+	utils.Parser.AddCommand("repo_image_manifests_get",
+		"Get manifests of a relevant repository.",
+		"This endpoint aims to retreive manifests from a relevant repository.",
+		&repoImageManifestsGet)
 	utils.Parser.AddCommand("repo_image_label_del",
 		"Delete label from the image under specific repository.",
 		"This endpoint deletes the label from the image specified by the repo_name and tag.",
@@ -50,6 +66,76 @@ func init() {
 		"Get public repositories which are accessed most.",
 		"This endpoint aims to let users see the most popular public repositories",
 		&reposTop)
+}
+
+type repositorySignatureGet struct {
+	RepoName string `short:"n" long:"repo_name" description:"(REQUIRED) The name of repository." required:"yes"`
+}
+
+var repoSignatureGet repositorySignatureGet
+
+func (x *repositorySignatureGet) Execute(args []string) error {
+	GetRepoSignature(utils.URLGen("/api/repositories"))
+	return nil
+}
+
+// GetRepoSignature aims to retrieve signature information of a repository, the data is from the nested notary instance of Harbor.
+//
+// params:
+//   repo_name - (REQUIRED) The name of repository.
+//
+// format:
+//   GET /repositories/{repo_name}/signatures
+//
+// e.g. curl -X GET --header 'Accept: text/plain' 'https://localhost/api/repositories/temp_3%2Fhello-world/signatures'
+func GetRepoSignature(baseURL string) {
+	targetURL := baseURL + "/" + repoSignatureGet.RepoName + "/signatures"
+	fmt.Println("==> GET", targetURL)
+
+	utils.Request.Get(targetURL).End(utils.PrintStatus)
+}
+
+type repositoryImageVulDetailsGet struct {
+}
+
+var repoImageVulDetailsGet repositoryImageVulDetailsGet
+
+type repositoryImageScan struct {
+}
+
+var repoImageScan repositoryImageScan
+
+type repositoryImageManifestsGet struct {
+	RepoName string `short:"n" long:"repo_name" description:"(REQUIRED) The name of repository." required:"yes"`
+	Tag      string `short:"t" long:"tag" description:"(REQUIRED) The tag of the image." required:"yes"`
+	Version  string `short:"v" long:"version" description:"The version of manifest, valid value are \"v1\" and \"v2\", default is \"v2\"" default:"v2"`
+}
+
+var repoImageManifestsGet repositoryImageManifestsGet
+
+func (x *repositoryImageManifestsGet) Execute(args []string) error {
+	GetRepoImageManifest(utils.URLGen("/api/repositories"))
+	return nil
+}
+
+// GetRepoImageManifest aims to retreive manifests from a relevant repository.
+//
+// params:
+//   repo_name - (REQUIRED) The name of repository.
+//   tag       - (REQUIRED) The tag of the image.
+//   version   - The version of manifest, valid value are "v1" and "v2", default is "v2"" default:"v2"
+//
+// format:
+//   GET /repositories/{repo_name}/tags/{tag}/manifest
+//
+// e.g. curl -X GET --header 'Accept: application/json' 'https://localhost/api/repositories/temp_3%2Fhello-world/tags/v1/manifest?version=v2'
+func GetRepoImageManifest(baseURL string) {
+	targetURL := baseURL + "/" + repoImageManifestsGet.RepoName +
+		"/tags/" + repoImageManifestsGet.Tag +
+		"/manifest?version=" + repoImageManifestsGet.Version
+	fmt.Println("==> GET", targetURL)
+
+	utils.Request.Get(targetURL).End(utils.PrintStatus)
 }
 
 type repositoryImageLabelDel struct {
