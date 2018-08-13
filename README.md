@@ -32,18 +32,18 @@ Current Harbor API support status:
     - [x] POST /api/projects
     - [x] DELETE /api/projects/{prject_id}
     - [x] GET /api/projects/{prject_id}
-    - [ ] PUT /api/projects/{prject_id}
-    - [ ] GET /api/projects/{prject_id}/logs
-    - [ ] GET /api/projects/{prject_id}/metadatas
-    - [ ] POST /api/projects/{prject_id}/metadatas
-    - [ ] DELETE /api/projects/{prject_id}/metadatas/{meta_name}
-    - [ ] GET /api/projects/{prject_id}/metadatas/{meta_name}
-    - [ ] PUT /api/projects/{prject_id}/metadatas/{meta_name}
-    - [ ] GET /api/projects/{prject_id}/members
-    - [ ] POST /api/projects/{prject_id}/members
-    - [ ] DELETE /api/projects/{prject_id}/members/{mid}
-    - [ ] GET /api/projects/{prject_id}/members/{mid}
-    - [ ] PUT /api/projects/{prject_id}/members/{mid}
+    - [x] PUT /api/projects/{prject_id}
+    - [x] GET /api/projects/{prject_id}/logs
+    - [x] GET /api/projects/{prject_id}/metadatas
+    - [x] POST /api/projects/{prject_id}/metadatas
+    - [x] DELETE /api/projects/{prject_id}/metadatas/{meta_name}
+    - [x] GET /api/projects/{prject_id}/metadatas/{meta_name}
+    - [x] PUT /api/projects/{prject_id}/metadatas/{meta_name}
+    - [x] GET /api/projects/{prject_id}/members
+    - [x] POST /api/projects/{prject_id}/members
+    - [x] DELETE /api/projects/{prject_id}/members/{mid}
+    - [x] GET /api/projects/{prject_id}/members/{mid}
+    - [x] PUT /api/projects/{prject_id}/members/{mid}
 - statistics
     - [x] GET /api/statistics
 - users
