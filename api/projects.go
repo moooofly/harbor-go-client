@@ -9,6 +9,26 @@ import (
 )
 
 func init() {
+	utils.Parser.AddCommand("prj_member_update",
+		"Update a member of a project.",
+		"Update a member of a project.",
+		&prjMemberUpdate)
+	utils.Parser.AddCommand("prj_member_get",
+		"Get a member of a project.",
+		"Get a member of a project.",
+		&prjMemberGet)
+	utils.Parser.AddCommand("prj_member_del",
+		"Delete a member of a project.",
+		"Delete a member of a project.",
+		&prjMemberDel)
+	utils.Parser.AddCommand("prj_member_create",
+		"Create a member of a project.",
+		"Create project member relationship, the member can be one of the user_member and group_member, The user_member need to specify user_id or username. If the user already exist in harbor DB, specify the user_id, If does not exist in harbor DB, it will SearchAndOnBoard the user. The group_member need to specify id or ldap_group_dn. If the group already exist in harbor DB. specify the user group's id, If does not exist, it will SearchAndOnBoard the group.",
+		&prjMemberCreate)
+	utils.Parser.AddCommand("prj_members_get",
+		"Get all members information of a project.",
+		"Get all members information of a project.",
+		&prjMembersGet)
 	utils.Parser.AddCommand("prj_metadata_update_by_name",
 		"Update metadata of a project by meta_name.",
 		"This endpoint is aimed to update the metadata of a project by meta_name.",
@@ -22,11 +42,11 @@ func init() {
 		"This endpoint is aimed to delete metadata of a project by meta_name.",
 		&prjMetadataDelByName)
 	utils.Parser.AddCommand("prj_metadata_add",
-		"Add metadata for the project.",
+		"Add metadata for a project.",
 		"This endpoint is aimed to add metadata of a project.",
 		&prjMetadataAdd)
 	utils.Parser.AddCommand("prj_metadata_get",
-		"Get project metadata.",
+		"Get metadata of a project.",
 		"This endpoint returns metadata of the project specified by project ID.",
 		&prjMetadataGet)
 	utils.Parser.AddCommand("prj_logs_get",
@@ -53,6 +73,261 @@ func init() {
 		"List projects.",
 		"This endpoint returns all projects created by Harbor, and can be filtered by project name.",
 		&prjsList)
+}
+
+type projectMemberUpdate struct {
+	ProjectID int `short:"j" long:"project_id" description:"(REQUIRED) The ID of project." required:"yes" json:"-"`
+	MID       int `short:"m" long:"mid" description:"(REQUIRED) Member ID." required:"yes" json:"-"`
+	RoleID    int `short:"r" long:"role_id" description:"(REQUIRED) Role ID. Only 1 (projectAdmin),2 (developer), 3 (guest) are valid." required:"yes" json:"role_id"`
+}
+
+var prjMemberUpdate projectMemberUpdate
+
+func (x *projectMemberUpdate) Execute(args []string) error {
+	PutPrjMemberUpdate(utils.URLGen("/api/projects"))
+	return nil
+}
+
+// PutPrjMemberUpdate updates a member of the project.
+//
+// params:
+//   project_id - (REQUIRED) The ID of project.
+//   mid        - (REQUIRED) Member ID.
+//   role_id    - (REQUIRED) Role ID.
+//
+// format:
+//   PUT /projects/{project_id}/members/{mid}
+//
+// e.g.
+/*
+curl -X PUT --header 'Content-Type: application/json' --header 'Accept: text/plain' -d '{ \
+   "role_id": 1 \
+ }' 'https://localhost/api/projects/86/members/86'
+*/
+func PutPrjMemberUpdate(baseURL string) {
+	targetURL := baseURL + "/" + strconv.Itoa(prjMemberUpdate.ProjectID) +
+		"/members/" + strconv.Itoa(prjMemberUpdate.MID)
+	fmt.Println("==> PUT", targetURL)
+
+	// Read beegosessionID from .cookie.yaml
+	c, err := utils.CookieLoad()
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	p, err := json.Marshal(&prjMemberUpdate)
+	if err != nil {
+		fmt.Println("error:", err)
+		return
+	}
+	fmt.Println("==> member update:", string(p))
+
+	utils.Request.Put(targetURL).
+		Set("Cookie", "harbor-lang=zh-cn; beegosessionID="+c.BeegosessionID).
+		Send(string(p)).
+		End(utils.PrintStatus)
+}
+
+type projectMemberGet struct {
+	ProjectID int `short:"j" long:"project_id" description:"(REQUIRED) The ID of project." required:"yes"`
+	MID       int `short:"m" long:"mid" description:"(REQUIRED) Member ID." required:"yes"`
+}
+
+var prjMemberGet projectMemberGet
+
+func (x *projectMemberGet) Execute(args []string) error {
+	GetPrjMember(utils.URLGen("/api/projects"))
+	return nil
+}
+
+// GetPrjMember gets a member of the project.
+//
+// params:
+//   project_id - (REQUIRED) The ID of project.
+//   mid        - (REQUIRED) Member ID.
+//
+// format:
+//   GET /projects/{project_id}/members/{mid}
+//
+// e.g. curl -X GET --header 'Accept: application/json' 'https://localhost/api/projects/86/members/86'
+func GetPrjMember(baseURL string) {
+	targetURL := baseURL + "/" + strconv.Itoa(prjMemberGet.ProjectID) +
+		"/members/" + strconv.Itoa(prjMemberGet.MID)
+	fmt.Println("==> GET", targetURL)
+
+	// Read beegosessionID from .cookie.yaml
+	c, err := utils.CookieLoad()
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	utils.Request.Get(targetURL).
+		Set("Cookie", "harbor-lang=zh-cn; beegosessionID="+c.BeegosessionID).
+		End(utils.PrintStatus)
+}
+
+type projectMemberDel struct {
+	ProjectID int `short:"j" long:"project_id" description:"(REQUIRED) The ID of project." required:"yes"`
+	MID       int `short:"m" long:"mid" description:"(REQUIRED) Member ID." required:"yes"`
+}
+
+var prjMemberDel projectMemberDel
+
+func (x *projectMemberDel) Execute(args []string) error {
+	DeletePrjMemberDel(utils.URLGen("/api/projects"))
+	return nil
+}
+
+// DeletePrjMemberDel deletes a member of the project.
+//
+// params:
+//   project_id - (REQUIRED) The ID of project.
+//   mid        - (REQUIRED) Member ID.
+//
+// format:
+//   DELETE /projects/{project_id}/members/{mid}
+//
+// e.g. curl -X DELETE --header 'Accept: text/plain' 'https://localhost/api/projects/86/members/86'
+func DeletePrjMemberDel(baseURL string) {
+	targetURL := baseURL + "/" + strconv.Itoa(prjMemberDel.ProjectID) +
+		"/members/" + strconv.Itoa(prjMemberDel.MID)
+	fmt.Println("==> DELETE", targetURL)
+
+	// Read beegosessionID from .cookie.yaml
+	c, err := utils.CookieLoad()
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	utils.Request.Delete(targetURL).
+		Set("Cookie", "harbor-lang=zh-cn; beegosessionID="+c.BeegosessionID).
+		End(utils.PrintStatus)
+}
+
+/*
+{
+  "role_id": 2,
+  "member_user": {
+    "username": "fei.sun"
+  }
+}
+
+*/
+
+type ProjectMember struct {
+	RoleID     int `json:"role_id,omitempty"`
+	MemberUser struct {
+		UserID   int    `json:"user_id,omitempty,omitempty"`
+		Username string `json:"username,omitempty"`
+	} `json:"member_user,omitempty"`
+	MemberGroup struct {
+		ID          int    `json:"id,omitempty"`
+		GroupName   string `json:"group_name,omitempty"`
+		GroupType   int    `json:"group_type,omitempty"`
+		LdapGroupDn string `json:"ldap_group_dn,omitempty"`
+	} `json:"member_group,omitempty"`
+}
+
+var prjMember ProjectMember
+
+type projectMemberCreate struct {
+	ProjectID int    `short:"j" long:"project_id" description:"(REQUIRED) The ID of project." required:"yes"`
+	RoleID    int    `short:"r" long:"role_id" description:"(REQUIRED) Role ID. Only 1 (projectAdmin),2 (developer), 3 (guest) are valid." required:"yes"`
+	Username  string `short:"n" long:"username" description:"(REQUIRED) Username." required:"yes"`
+}
+
+var prjMemberCreate projectMemberCreate
+
+func (x *projectMemberCreate) Execute(args []string) error {
+	PostPrjMemberCreate(utils.URLGen("/api/projects"))
+	return nil
+}
+
+// PostPrjMemberCreate creates project member relationship, the member can be one of the user_member and group_member, The user_member need to specify user_id or username. If the user already exist in harbor DB, specify the user_id, If does not exist in harbor DB, it will SearchAndOnBoard the user. The group_member need to specify id or ldap_group_dn. If the group already exist in harbor DB. specify the user group's id, If does not exist, it will SearchAndOnBoard the group.
+//
+// params:
+//   project_id - (REQUIRED) The ID of project.
+//   mid        - (REQUIRED) Member ID.
+//
+// format:
+//   POST /projects/{project_id}/members
+//
+// e.g.
+/*
+curl -X POST --header 'Content-Type: application/json' --header 'Accept: text/plain' -d '{ \
+   "role_id": 3, \
+   "member_user": { \
+     "username": "fei.sun" \
+   } \
+ }' 'https://localhost/api/projects/86/members'
+*/
+func PostPrjMemberCreate(baseURL string) {
+	targetURL := baseURL + "/" + strconv.Itoa(prjMemberCreate.ProjectID) + "/members"
+	fmt.Println("==> POST", targetURL)
+
+	// Read beegosessionID from .cookie.yaml
+	c, err := utils.CookieLoad()
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	prjMember.RoleID = prjMemberCreate.RoleID
+	prjMember.MemberUser.Username = prjMemberCreate.Username
+
+	p, err := json.Marshal(&prjMember)
+	if err != nil {
+		fmt.Println("error:", err)
+		return
+	}
+	fmt.Println("==> member create:", string(p))
+
+	utils.Request.Post(targetURL).
+		Set("Cookie", "harbor-lang=zh-cn; beegosessionID="+c.BeegosessionID).
+		Send(string(p)).
+		End(utils.PrintStatus)
+}
+
+type projectMembersGet struct {
+	ProjectID  int    `short:"j" long:"project_id" description:"(REQUIRED) The ID of project." required:"yes"`
+	EntityName string `short:"n" long:"entityname" description:"The entity name to search (filter)." default:""`
+}
+
+var prjMembersGet projectMembersGet
+
+func (x *projectMembersGet) Execute(args []string) error {
+	GetPrjAllMembers(utils.URLGen("/api/projects"))
+	return nil
+}
+
+// GetPrjAllMembers gets all members information of the project.
+//
+// params:
+//   project_id - (REQUIRED) The ID of project.
+//   entityname - The entity name to search (filter).
+//
+// format:
+//   GET /projects/{project_id}/members
+//
+// e.g. curl -X GET --header 'Accept: application/json' 'https://localhost/api/projects/86/members?entityname=admin'
+func GetPrjAllMembers(baseURL string) {
+	targetURL := baseURL + "/" + strconv.Itoa(prjMembersGet.ProjectID) +
+		"/members?entityname=" + prjMembersGet.EntityName
+	fmt.Println("==> GET", targetURL)
+
+	// Read beegosessionID from .cookie.yaml
+	c, err := utils.CookieLoad()
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	utils.Request.Get(targetURL).
+		Set("Cookie", "harbor-lang=zh-cn; beegosessionID="+c.BeegosessionID).
+		End(utils.PrintStatus)
 }
 
 type projectMetadataUpdateByName struct {
