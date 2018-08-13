@@ -9,6 +9,18 @@ import (
 )
 
 func init() {
+	utils.Parser.AddCommand("prj_metadata_update_by_name",
+		"Update metadata of a project by meta_name.",
+		"This endpoint is aimed to update the metadata of a project by meta_name.",
+		&prjMetadataUpdateByName)
+	utils.Parser.AddCommand("prj_metadata_get_by_name",
+		"Get metadata of a project by meta_name.",
+		"This endpoint returns specified metadata of a project by meta_name.",
+		&prjMetadataGetByName)
+	utils.Parser.AddCommand("prj_metadata_del_by_name",
+		"Delete metadata of a project by meta_name.",
+		"This endpoint is aimed to delete metadata of a project by meta_name.",
+		&prjMetadataDelByName)
 	utils.Parser.AddCommand("prj_metadata_add",
 		"Add metadata for the project.",
 		"This endpoint is aimed to add metadata of a project.",
@@ -41,6 +53,123 @@ func init() {
 		"List projects.",
 		"This endpoint returns all projects created by Harbor, and can be filtered by project name.",
 		&prjsList)
+}
+
+type projectMetadataUpdateByName struct {
+	ProjectID int    `short:"j" long:"project_id" description:"(REQUIRED) The ID of project." required:"yes"`
+	MetaName  string `short:"m" long:"meta_name" description:"(REQUIRED) The name of metadata." required:"yes"`
+}
+
+var prjMetadataUpdateByName projectMetadataUpdateByName
+
+func (x *projectMetadataUpdateByName) Execute(args []string) error {
+	PutPrjMetadataUpdateByName(utils.URLGen("/api/projects"))
+	return nil
+}
+
+// PutPrjMetadataUpdateByName is aimed to update the metadata of a project.
+//
+// params:
+//   project_id - (REQUIRED) The ID of project.
+//   meta_name  - (REQUIRED) The name of metadata.
+//
+// format:
+//   PUT /projects/{project_id}/metadatas/{meta_name}
+//
+// e.g. curl -X PUT --header 'Content-Type: application/json' --header 'Accept: text/plain' 'https://localhost/api/projects/86/metadatas/metaname_new'
+func PutPrjMetadataUpdateByName(baseURL string) {
+	targetURL := baseURL + "/" + strconv.Itoa(prjMetadataUpdateByName.ProjectID) +
+		"/metadatas" + prjMetadataUpdateByName.MetaName
+	fmt.Println("==> PUT", targetURL)
+
+	// Read beegosessionID from .cookie.yaml
+	c, err := utils.CookieLoad()
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	utils.Request.Put(targetURL).
+		Set("Cookie", "harbor-lang=zh-cn; beegosessionID="+c.BeegosessionID).
+		End(utils.PrintStatus)
+}
+
+type projectMetadataGetByName struct {
+	ProjectID int    `short:"j" long:"project_id" description:"(REQUIRED) The ID of project." required:"yes"`
+	MetaName  string `short:"m" long:"meta_name" description:"(REQUIRED) The name of metadata." required:"yes"`
+}
+
+var prjMetadataGetByName projectMetadataGetByName
+
+func (x *projectMetadataGetByName) Execute(args []string) error {
+	GetPrjMetadataGetByName(utils.URLGen("/api/projects"))
+	return nil
+}
+
+// GetPrjMetadataGetByName returns specified metadata of a project.
+//
+// params:
+//   project_id - (REQUIRED) The ID of project.
+//   meta_name  - (REQUIRED) The name of metadata.
+//
+// format:
+//   GET /projects/{project_id}/metadatas/{meta_name}
+//
+// e.g. curl -X GET --header 'Accept: text/plain' 'https://localhost/api/projects/86/metadatas/metaname_new'
+func GetPrjMetadataGetByName(baseURL string) {
+	targetURL := baseURL + "/" + strconv.Itoa(prjMetadataGetByName.ProjectID) +
+		"/metadatas" + prjMetadataGetByName.MetaName
+	fmt.Println("==> GET", targetURL)
+
+	// Read beegosessionID from .cookie.yaml
+	c, err := utils.CookieLoad()
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	utils.Request.Get(targetURL).
+		Set("Cookie", "harbor-lang=zh-cn; beegosessionID="+c.BeegosessionID).
+		End(utils.PrintStatus)
+}
+
+type projectMetadataDelByName struct {
+	ProjectID int    `short:"j" long:"project_id" description:"(REQUIRED) The ID of project." required:"yes"`
+	MetaName  string `short:"m" long:"meta_name" description:"(REQUIRED) The name of metadata." required:"yes"`
+}
+
+var prjMetadataDelByName projectMetadataDelByName
+
+func (x *projectMetadataDelByName) Execute(args []string) error {
+	DeletePrjMetadataDelByName(utils.URLGen("/api/projects"))
+	return nil
+}
+
+// DeletePrjMetadataDelByName is aimed to delete metadata of a project.
+//
+// params:
+//   project_id - (REQUIRED) The ID of project.
+//   meta_name  - (REQUIRED) The name of metadata.
+//
+// format:
+//   DELETE /projects/{project_id}/metadatas/{meta_name}
+//
+// e.g. curl -X DELETE --header 'Accept: text/plain' 'https://localhost/api/projects/86/metadatas/metaname-new'
+func DeletePrjMetadataDelByName(baseURL string) {
+	targetURL := baseURL + "/" + strconv.Itoa(prjMetadataDelByName.ProjectID) +
+		"/metadatas" + prjMetadataDelByName.MetaName
+	fmt.Println("==> DELETE", targetURL)
+
+	// Read beegosessionID from .cookie.yaml
+	c, err := utils.CookieLoad()
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	utils.Request.Delete(targetURL).
+		Set("Cookie", "harbor-lang=zh-cn; beegosessionID="+c.BeegosessionID).
+		End(utils.PrintStatus)
 }
 
 type projectMetadataAdd struct {
