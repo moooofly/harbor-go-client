@@ -82,10 +82,10 @@ Current Harbor API support status:
     - [x] GET /api/jobs/replication/{id}/log
     - [x] GET /api/jobs/scan/{id}/log
 - policies
-    - [ ] GET /api/policies/replication
-    - [ ] POST /api/policies/replication
-    - [ ] GET /api/policies/replication/{id}
-    - [ ] PUT /api/policies/replication/{id}
+    - [x] GET /api/policies/replication
+    - [x] POST /api/policies/replication
+    - [x] GET /api/policies/replication/{id}
+    - [x] PUT /api/policies/replication/{id}
 - labels
     - [ ] GET /api/labels
     - [ ] POST /api/labels
