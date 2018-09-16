@@ -1,3 +1,36 @@
+<a name="0.9.4"></a>
+# [0.9.4](https://github.com/moooofly/harbor-go-client/compare/v0.9.3...v0.9.4) (2018-09-16)
+
+
+### Features
+
+* add all policy APIs ([53e2193](https://github.com/moooofly/harbor-go-client/commit/53e2193))
+
+
+<a name="0.9.3"></a>
+# [0.9.3](https://github.com/moooofly/harbor-go-client/compare/v0.9.2...v0.9.3) (2018-08-14)
+
+
+### Features
+
+* **project api:** add prj_member_update/prj_member_get/prj_member_del/prj_member_create/prj_members ([fea77d2](https://github.com/moooofly/harbor-go-client/commit/fea77d2))
+* **project api:** add prj_metadata_update_by_name/prj_metadata_get_by_name/prj_metadata_del_by_name ([0020cec](https://github.com/moooofly/harbor-go-client/commit/0020cec))
+* **project api:** add prj_metadata_add/prj_metadata_get/prj_logs_get/prj_update APIs ([5770328](https://github.com/moooofly/harbor-go-client/commit/5770328))
+
+
+<a name="0.9.2"></a>
+# [0.9.2](https://github.com/moooofly/harbor-go-client/compare/v0.9.1...v0.9.2) (2018-08-12)
+
+
+### Features
+
+* **repository api:** add repo_signature_get/repo_image_manifests_get APIs ([95d322d](https://github.com/moooofly/harbor-go-client/commit/95d322d))
+* **repository api:** add repo_image_label_del api ([b5b152a](https://github.com/moooofly/harbor-go-client/commit/b5b152a))
+* **repository api:** add repo_image_label_add api ([01f7885](https://github.com/moooofly/harbor-go-client/commit/01f7885))
+* **repository api:** add repo_image_labels_get/repo_label_del APIs ([54e02be](https://github.com/moooofly/harbor-go-client/commit/54e02be))
+* **repository api:** add repo_label_add/repo_labels_get/repo_desp_update APIs ([c12b012](https://github.com/moooofly/harbor-go-client/commit/c12b012))
+
+
 <a name="0.9.1"></a>
 # [0.9.1](https://github.com/moooofly/harbor-go-client/compare/v0.9.0...v0.9.1) (2018-08-06)
 
