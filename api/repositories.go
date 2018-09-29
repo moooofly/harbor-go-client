@@ -24,7 +24,7 @@ func init() {
 		&repoImageScan)
 	utils.Parser.AddCommand("repo_image_manifests_get",
 		"Get manifests of a relevant repository.",
-		"This endpoint aims to retreive manifests from a relevant repository.",
+		"This endpoint aims to retrieve manifests from a relevant repository.",
 		&repoImageManifestsGet)
 	utils.Parser.AddCommand("repo_image_label_del",
 		"Delete label from the image under specific repository.",
@@ -118,7 +118,7 @@ func (x *repositoryImageManifestsGet) Execute(args []string) error {
 	return nil
 }
 
-// GetRepoImageManifest aims to retreive manifests from a relevant repository.
+// GetRepoImageManifest aims to retrieve manifests from a relevant repository.
 //
 // params:
 //   repo_name - (REQUIRED) The name of repository.
@@ -184,7 +184,7 @@ type repositoryImageLabelAdd struct {
 	Name         string `long:"name" description:"The name of this label." default:"" json:"name"`
 	Description  string `long:"description" description:"The description of this label." default:"" json:"description"`
 	Color        string `long:"color" description:"The color code of this label. (e.g. Format: #A9B6BE)" default:"" json:"color"`
-	Scope        string `long:"scope" description:"The scope of this label. ('p' indicats project scope, 'g' indicates global scope)" default:"" json:"scope"`
+	Scope        string `long:"scope" description:"The scope of this label. ('p' indicates project scope, 'g' indicates global scope)" default:"" json:"scope"`
 	ProjectID    int    `long:"project_id" description:"Which project (id) this label belongs to when created. ('0' indicates global label, others indicate specific project)" default:"" json:"project_id"`
 	CreationTime string `long:"creation_time" description:"The creation time of this label. default time.Now()" default:"" json:"creation_time"`
 	UpdateTime   string `long:"update_time" description:"The update time of this label. default time.Now()" default:"" json:"update_time"`
@@ -207,7 +207,7 @@ func (x *repositoryImageLabelAdd) Execute(args []string) error {
 //   name          - The name of this label.
 //   description   - The description of this label.
 //   color         - The color code of this label. (e.g. Format: #A9B6BE)
-//   scope         - The scope of this label. ('p' indicats project scope, 'g' indicates global scope)
+//   scope         - The scope of this label. ('p' indicates project scope, 'g' indicates global scope)
 //   project_id    - Which project (id) this label belongs to when created. ('0' indicates global label, others indicate specific project)
 //   creation_time - The creation time of this label. default time.Now()
 //   update_time   - The update time of this label. default time.Now()
@@ -300,7 +300,7 @@ func (x *repositoryLabelDel) Execute(args []string) error {
 	return nil
 }
 
-// DelRepoByRepoName deletes the label from the repository specified by the repo_name.
+// DeleteRepoLabel deletes the label from the repository specified by the repo_name.
 //
 // params:
 //   repo_name - (REQUIRED) The name of repository that you want to delete a label from.
@@ -330,7 +330,7 @@ type repositoryLabelAdd struct {
 	Name         string `long:"name" description:"The name of this label." default:"" json:"name"`
 	Description  string `long:"description" description:"The description of this label." default:"" json:"description"`
 	Color        string `long:"color" description:"The color code of this label. (e.g. Format: #A9B6BE)" default:"" json:"color"`
-	Scope        string `long:"scope" description:"The scope of this label. ('p' indicats project scope, 'g' indicates global scope)" default:"" json:"scope"`
+	Scope        string `long:"scope" description:"The scope of this label. ('p' indicates project scope, 'g' indicates global scope)" default:"" json:"scope"`
 	ProjectID    int    `long:"project_id" description:"Which project (id) this label belongs to when created. ('0' indicates global label, others indicate specific project)" default:"" json:"project_id"`
 	CreationTime string `long:"creation_time" description:"The creation time of this label. default time.Now()" default:"" json:"creation_time"`
 	UpdateTime   string `long:"update_time" description:"The update time of this label. default time.Now()" default:"" json:"update_time"`
@@ -352,7 +352,7 @@ func (x *repositoryLabelAdd) Execute(args []string) error {
 //   name          - The name of this label.
 //   description   - The description of this label.
 //   color         - The color code of this label. (e.g. Format: #A9B6BE)
-//   scope         - The scope of this label. ('p' indicats project scope, 'g' indicates global scope)
+//   scope         - The scope of this label. ('p' indicates project scope, 'g' indicates global scope)
 //   project_id    - Which project (id) this label belongs to when created. ('0' indicates global label, others indicate specific project)
 //   creation_time - The creation time of this label. default time.Now()
 //   update_time   - The update time of this label. default time.Now()
@@ -456,7 +456,6 @@ curl -X PUT --header 'Content-Type: application/json' --header 'Accept: text/pla
    "description": "change" \
  }' 'https://localhost/api/repositories/temp_5%2Fhello-world'
 */
-
 func PutRepoDescriptionUpdate(baseURL string) {
 	targetURL := baseURL + "/" + repoUpdate.RepoName
 	fmt.Println("==> PUT", targetURL)
