@@ -1,3 +1,9 @@
+<a name="0.9.5"></a>
+# [0.9.5](https://github.com/moooofly/harbor-go-client/compare/v0.9.4...v0.9.5) (2018-09-29)
+
+* do some trivial ajustments
+
+
 <a name="0.9.4"></a>
 # [0.9.4](https://github.com/moooofly/harbor-go-client/compare/v0.9.3...v0.9.4) (2018-09-16)
 
