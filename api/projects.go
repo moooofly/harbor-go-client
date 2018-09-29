@@ -217,6 +217,7 @@ func DeletePrjMemberDel(baseURL string) {
 
 */
 
+// ProjectMember defines the member settings of a project.
 type ProjectMember struct {
 	RoleID     int `json:"role_id,omitempty"`
 	MemberUser struct {

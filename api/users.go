@@ -13,38 +13,38 @@ func init() {
 	utils.Parser.AddCommand("user_update_role",
 		"Update a registered user to change to be an administrator of Harbor.",
 		"This endpoint let a registered user change to be an administrator of Harbor.",
-		&user_update_role)
+		&usrUpdateRole)
 	utils.Parser.AddCommand("user_update_password",
 		"Change the password on a user that already exists.",
 		"This endpoint is for user to update password. Users with the admin role can change any user's password. Guest users can change only their own password.",
-		&user_update_password)
+		&usrUpdatePassword)
 	utils.Parser.AddCommand("user_update",
 		"Update a registered user to change his profile.",
 		"This endpoint let a registered user change his profile.",
-		&user_update)
+		&usrUpdate)
 	utils.Parser.AddCommand("user_get",
 		"Get a user's profile.",
 		"Get user's profile with user id.",
-		&user_get)
+		&usrGet)
 	utils.Parser.AddCommand("user_delete",
 		"Mark a registered user as be removed.",
 		"This endpoint let administrator of Harbor mark a registered user as be removed. It actually won't be deleted from DB.",
-		&user_delete)
+		&usrDelete)
 	utils.Parser.AddCommand("user_create",
 		"Creates a new user account.",
 		"This endpoint is to create a user if the user does not already exist.",
-		&user_create)
+		&usrCreate)
 	utils.Parser.AddCommand("users_search",
 		"Get registered users of Harbor.",
 		"This endpoint is for user to search registered users, support for filtering results with username. Notice, by now this operation is only for administrator.",
-		&users_search)
+		&usrSearch)
 	// NOTE:
 	// 由于 user_current 命令是是用于列出当前 login 用户相关信息
 	// 故将其改名为 whoami
 	utils.Parser.AddCommand("whoami",
 		"Show info about current login user only.",
 		"Maybe 'whoami' is a better name.",
-		&user_current)
+		&usrCurrent)
 }
 
 type userUpdateRole struct {
@@ -52,7 +52,7 @@ type userUpdateRole struct {
 	HasAdminRole int `short:"r" long:"has_admin_role" description:"(REQUIRED) Toggle a user to admin or not." required:"yes" json:"has_admin_role"`
 }
 
-var user_update_role userUpdateRole
+var usrUpdateRole userUpdateRole
 
 func (x *userUpdateRole) Execute(args []string) error {
 	PutUserUpdateRole(utils.URLGen("/api/users"))
@@ -74,7 +74,7 @@ func (x *userUpdateRole) Execute(args []string) error {
 //  }' 'https://localhost/api/users/1/sysadmin'
 //
 func PutUserUpdateRole(baseURL string) {
-	targetURL := baseURL + "/" + strconv.Itoa(user_update_role.UserID) + "/sysadmin"
+	targetURL := baseURL + "/" + strconv.Itoa(usrUpdateRole.UserID) + "/sysadmin"
 
 	fmt.Println("==> PUT", targetURL)
 
@@ -85,7 +85,7 @@ func PutUserUpdateRole(baseURL string) {
 		return
 	}
 
-	t, err := json.Marshal(&user_update_role)
+	t, err := json.Marshal(&usrUpdateRole)
 	if err != nil {
 		fmt.Println("error:", err)
 		return
@@ -105,7 +105,7 @@ type userUpdatePassword struct {
 	NewPassword string `short:"n" long:"new_password" description:"(REQUIRED) New password." required:"yes" json:"new_password"`
 }
 
-var user_update_password userUpdatePassword
+var usrUpdatePassword userUpdatePassword
 
 func (x *userUpdatePassword) Execute(args []string) error {
 	PutUserUpdatePassword(utils.URLGen("/api/users"))
@@ -129,7 +129,7 @@ func (x *userUpdatePassword) Execute(args []string) error {
 //  }' 'https://localhost/api/users/1/password'
 //
 func PutUserUpdatePassword(baseURL string) {
-	targetURL := baseURL + "/" + strconv.Itoa(user_update_password.UserID) + "/password"
+	targetURL := baseURL + "/" + strconv.Itoa(usrUpdatePassword.UserID) + "/password"
 
 	fmt.Println("==> PUT", targetURL)
 
@@ -140,7 +140,7 @@ func PutUserUpdatePassword(baseURL string) {
 		return
 	}
 
-	t, err := json.Marshal(&user_update_password)
+	t, err := json.Marshal(&usrUpdatePassword)
 	if err != nil {
 		fmt.Println("error:", err)
 		return
@@ -162,7 +162,7 @@ type userUpdate struct {
 	Comment  string `short:"m" long:"comment" description:"(REQUIRED) Custom comment." required:"yes" json:"comment"`
 }
 
-var user_update userUpdate
+var usrUpdate userUpdate
 
 func (x *userUpdate) Execute(args []string) error {
 	PutUserUpdate(utils.URLGen("/api/users"))
@@ -188,7 +188,7 @@ func (x *userUpdate) Execute(args []string) error {
 //  }' 'https://localhost/api/users/1'
 //
 func PutUserUpdate(baseURL string) {
-	targetURL := baseURL + "/" + strconv.Itoa(user_update.UserID)
+	targetURL := baseURL + "/" + strconv.Itoa(usrUpdate.UserID)
 
 	fmt.Println("==> PUT", targetURL)
 
@@ -199,7 +199,7 @@ func PutUserUpdate(baseURL string) {
 		return
 	}
 
-	t, err := json.Marshal(&user_update)
+	t, err := json.Marshal(&usrUpdate)
 	if err != nil {
 		fmt.Println("error:", err)
 		return
@@ -217,7 +217,7 @@ type userGet struct {
 	UserID int `short:"i" long:"user_id" description:"(REQUIRED) Registered user ID." required:"yes"`
 }
 
-var user_get userGet
+var usrGet userGet
 
 func (x *userGet) Execute(args []string) error {
 	GetUserProfile(utils.URLGen("/api/users"))
@@ -235,7 +235,7 @@ func (x *userGet) Execute(args []string) error {
 // e.g. curl -X GET --header 'Accept: text/plain' 'https://localhost/api/users/1'
 //
 func GetUserProfile(baseURL string) {
-	targetURL := baseURL + "/" + strconv.Itoa(user_get.UserID)
+	targetURL := baseURL + "/" + strconv.Itoa(usrGet.UserID)
 
 	fmt.Println("==> GET", targetURL)
 
@@ -255,7 +255,7 @@ type userDelete struct {
 	UserID int `short:"i" long:"user_id" description:"(REQUIRED) User ID for marking as to be removed." required:"yes"`
 }
 
-var user_delete userDelete
+var usrDelete userDelete
 
 func (x *userDelete) Execute(args []string) error {
 	DeleteUser(utils.URLGen("/api/users"))
@@ -273,7 +273,7 @@ func (x *userDelete) Execute(args []string) error {
 // e.g. curl -X DELETE --header 'Accept: text/plain' 'https://localhost/api/users/1'
 //
 func DeleteUser(baseURL string) {
-	targetURL := baseURL + "/" + strconv.Itoa(user_delete.UserID)
+	targetURL := baseURL + "/" + strconv.Itoa(usrDelete.UserID)
 
 	fmt.Println("==> DELETE", targetURL)
 
@@ -307,7 +307,7 @@ type userCreate struct {
 	UpdateTime   string `short:"u" long:"update_time" description:"User's update time. Default time.Now()." default:"" json:"update_time"`
 }
 
-var user_create userCreate
+var usrCreate userCreate
 
 func (x *userCreate) Execute(args []string) error {
 	PostUserCreate(utils.URLGen("/api/users"))
@@ -354,10 +354,10 @@ func (x *userCreate) Execute(args []string) error {
 //  }' 'https://localhost/api/users'
 //
 func PostUserCreate(baseURL string) {
-	if user_create.CreationTime == "" || user_create.UpdateTime == "" {
+	if usrCreate.CreationTime == "" || usrCreate.UpdateTime == "" {
 		now := time.Now().Format("2006-01-02T15:04:05Z")
-		user_create.CreationTime = now
-		user_create.UpdateTime = now
+		usrCreate.CreationTime = now
+		usrCreate.UpdateTime = now
 	}
 
 	targetURL := baseURL
@@ -370,7 +370,7 @@ func PostUserCreate(baseURL string) {
 		return
 	}
 
-	t, err := json.Marshal(&user_create)
+	t, err := json.Marshal(&usrCreate)
 	if err != nil {
 		fmt.Println("error:", err)
 		return
@@ -391,7 +391,7 @@ type usersSearch struct {
 	PageSize int    `short:"s" long:"page_size" description:"The size of per page, default is 10." default:"10"`
 }
 
-var users_search usersSearch
+var usrSearch usersSearch
 
 func (x *usersSearch) Execute(args []string) error {
 	GetUsersSearch(utils.URLGen("/api/users"))
@@ -412,10 +412,10 @@ func (x *usersSearch) Execute(args []string) error {
 // e.g. curl -X GET --header 'Accept: application/json' 'https://localhost/api/users?username=san.zhang&email=san.zhang@163.com&page=1&page_size=10'
 //
 func GetUsersSearch(baseURL string) {
-	targetURL := baseURL + "?username=" + users_search.Username +
-		"&email=" + users_search.Email +
-		"&page=" + strconv.Itoa(users_search.Page) +
-		"&page_size=" + strconv.Itoa(users_search.PageSize)
+	targetURL := baseURL + "?username=" + usrSearch.Username +
+		"&email=" + usrSearch.Email +
+		"&page=" + strconv.Itoa(usrSearch.Page) +
+		"&page_size=" + strconv.Itoa(usrSearch.PageSize)
 
 	fmt.Println("==> GET", targetURL)
 
@@ -434,7 +434,7 @@ func GetUsersSearch(baseURL string) {
 type userCurrent struct {
 }
 
-var user_current userCurrent
+var usrCurrent userCurrent
 
 func (x *userCurrent) Execute(args []string) error {
 	GetUserCurrent(utils.URLGen("/api/users"))
