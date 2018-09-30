@@ -33,6 +33,12 @@
 >
 > For more information about GC, please see GC.
 
+简单来说，Repository 删除分两步：
+
+- 首先，通过 Harbor UI 或者 RESTful API 删除目标 repository 或者目标 repository 的某些 tags ；此时的删除被称作“soft deletion”；在 soft deletion 之后，repository 不再直接被 harbor 所管理，但 repository 对应的文件内容仍旧存在于 harbor 所使用的存储设备中；
+- 其次，通过 repository 提供的 GC 命令删除 repository 相关的文件系统文件；在执行 GC 命令时，要求 harbor 处于只读状态，或者干脆不要运行；否则，可能发生 image 的某些 layers 被错误的删除的情况，进而导致 image 不可用（相关 issues ：[goharbor/harbor/issues#4214](https://github.com/goharbor/harbor/issues/4214) [goharbor/harbor/issues#5167](https://github.com/goharbor/harbor/issues/5167)）；
+
+
 这里有一个问题需要弄清楚：**即删除镜像的过程中需要注意哪些问题**？
 
 详见《[Garbage Collection](https://github.com/moooofly/harbor-go-client/blob/master/docs/Garbage%20Collection.md)》
