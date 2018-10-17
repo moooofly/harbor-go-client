@@ -87,11 +87,11 @@ Current Harbor API support status:
     - [x] GET /api/policies/replication/{id}
     - [x] PUT /api/policies/replication/{id}
 - labels
-    - [ ] GET /api/labels
-    - [ ] POST /api/labels
-    - [ ] DELETE /api/labels/{id}
-    - [ ] GET /api/labels/{id}
-    - [ ] PUT /api/labels/{id}
+    - [x] GET /api/labels
+    - [x] POST /api/labels
+    - [x] DELETE /api/labels/{id}
+    - [x] GET /api/labels/{id}
+    - [x] PUT /api/labels/{id}
 - replications
     - [ ] POST /api/replications
 - targets
