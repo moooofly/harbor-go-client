@@ -1,3 +1,17 @@
+<a name="1.0.0"></a>
+# [1.0.0](https://github.com/moooofly/harbor-go-client/compare/v0.9.6...v1.0.0) (2018-10-24)
+
+
+### Features
+
+* add replications trigger API ([0753d6c](https://github.com/moooofly/harbor-go-client/commit/0753d6c))
+* add syncregistry and email_ping APIs ([2b18258](https://github.com/moooofly/harbor-go-client/commit/2b18258))
+* add usergroups APIs ([47ef550](https://github.com/moooofly/harbor-go-client/commit/47ef550))
+* support both linux and darwin platform compilation ([a665e0f](https://github.com/moooofly/harbor-go-client/commit/a665e0f))
+* support darwin platform, fix [#1](https://github.com/moooofly/harbor-go-client/issues/1) ([c671c20](https://github.com/moooofly/harbor-go-client/commit/c671c20))
+
+
+
 <a name="0.9.6"></a>
 # [0.9.6](https://github.com/moooofly/harbor-go-client/compare/v0.9.5...v0.9.6) (2018-10-17)
 
