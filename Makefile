@@ -5,11 +5,14 @@ ifeq "$(GOPATH)" ""
   $(error Please set the environment variable GOPATH before running `make`)
 endif
 
-GO         := go
-PKGS       := $(shell $(GO) list ./... | grep -v vendor)
+GOOS       := $(shell go env GOOS)
+GOARCH     := $(shell go env GOARCH)
+PKGS       := $(shell go list ./... | grep -v vendor)
+
+
 # NOTE: '-race' requires cgo; enable cgo by setting CGO_ENABLED=1
 #BUILD_FLAG := -race
-GOBUILD    := CGO_ENABLED=0 $(GO) build $(BUILD_FLAG)
+GOBUILD    := CGO_ENABLED=0 GOOS=${GOOS} GOARCH=${GOARCH} go build $(BUILD_FLAG)
 
 LDFLAGS += -X "github.com/moooofly/harbor-go-client/utils.ClientVersion=$(shell cat VERSION)"
 LDFLAGS += -X "github.com/moooofly/harbor-go-client/utils.GoVersion=$(shell go version)"
@@ -24,12 +27,12 @@ all: lint build test
 
 build:
 	@echo "==> Building ..."
-	$(GOBUILD) -ldflags '$(LDFLAGS)' ./
+	$(GOBUILD) -o harborctl_${GOOS}_${GOARCH} -ldflags '$(LDFLAGS)' ./
 	@echo ""
 
 install:
 	@echo "==> Installing ..."
-	$(GO) install -x ${SRC}
+	go install -x ${SRC}
 	@echo ""
 
 lint:
@@ -43,19 +46,27 @@ lint:
 
 test:
 	@echo "==> Testing ..."
-	$(GO) test -short -race $(PKGS)
+	go test -short -race $(PKGS)
 	@echo ""
 
-pack: build
+build_linux:
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build $(BUILD_FLAG) -o harborctl_linux_amd64 -ldflags '$(LDFLAGS)' ./
+
+build_darwin:
+	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build $(BUILD_FLAG) -o harborctl_darwin_amd64 -ldflags '$(LDFLAGS)' ./
+
+pack: build_linux build_darwin
 	@echo "==> Packing ..."
-	@tar czvf $(shell cat VERSION)-bin.tar.gz harbor-go-client conf/*.yaml
+	@tar czvf harborctl-$(shell cat VERSION).linux-amd64.tar.gz harborctl_linux_amd64 conf/*.yaml
 	@echo ""
-	@rm harbor-go-client
+	@tar czvf harborctl-$(shell cat VERSION).darwin-amd64.tar.gz harborctl_darwin_amd64 conf/*.yaml
 	@echo ""
+	@rm harborctl_linux_amd64
+	@rm harborctl_darwin_amd64
 
 docker:
 	@echo "==> Creating docker image ..."
-	docker build -t harbor-go-client:$(shell git rev-parse --short HEAD) .
+	docker build -t harborctl:$(shell git rev-parse --short HEAD) .
 	@echo ""
 
 misspell:
@@ -73,7 +84,8 @@ shellcheck:
 
 clean:
 	@echo "==> Cleaning ..."
-	$(GO) clean -x -i ${SRC}
+	go clean -x -i ${SRC}
+	rm -f harborctl_*
 	rm -rf *.out
 	rm -rf *.tar.gz
 	@echo ""

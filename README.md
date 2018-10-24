@@ -93,7 +93,7 @@ Current Harbor API support status:
     - [x] GET /api/labels/{id}
     - [x] PUT /api/labels/{id}
 - replications
-    - [ ] POST /api/replications
+    - [x] POST /api/replications
 - targets
     - [x] GET /api/targets
     - [x] POST /api/targets
@@ -104,7 +104,7 @@ Current Harbor API support status:
     - [x] PUT /api/targets/{id}
     - [x] GET /api/targets/{id}/policies/
 - internal
-    - [ ] POST /api/internal/syncregistry
+    - [x] POST /api/internal/syncregistry
 - systeminfo
     - [x] GET /api/systeminfo
     - [x] GET /api/systeminfo/volumes
@@ -115,17 +115,17 @@ Current Harbor API support status:
     - [ ] GET /api/ldap/users/search
     - [ ] POST /api/ldap/users/import
 - usergroups
-    - [ ] GET /api/usergroups
-    - [ ] POST /api/usergroups
-    - [ ] DELETE /api/usergroups/{group_id}
-    - [ ] GET /api/usergroups/{group_id}
-    - [ ] PUT /api/usergroups/{group_id}
+    - [x] GET /api/usergroups
+    - [x] POST /api/usergroups
+    - [x] DELETE /api/usergroups/{group_id}
+    - [x] GET /api/usergroups/{group_id}
+    - [x] PUT /api/usergroups/{group_id}
 - configurations
     - [x] GET /api/configurations
     - [x] PUT /api/configurations
     - [x] POST /api/configurations/reset
 - email
-    - [ ] POST /api/email/ping
+    - [x] POST /api/email/ping
 
 
 Additional features supported:
