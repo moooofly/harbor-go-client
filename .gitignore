@@ -1,7 +1,7 @@
 # customize
 
 .cookie.yaml
-harbor-go-client
+harborctl*
 *.tar.gz
 
 
