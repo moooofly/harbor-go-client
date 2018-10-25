@@ -25,8 +25,6 @@ type statistics struct {
 
 var stats statistics
 
-// ---
-
 type repoTop struct {
 	ID           int    `json:"id"`
 	Name         string `json:"name"`
@@ -40,8 +38,6 @@ type repoTop struct {
 }
 
 var repos []*repoTop
-
-// ---
 
 type repoSearch struct {
 	ProjectID      int    `json:"project_id"`
@@ -58,8 +54,6 @@ type searchRsp struct {
 }
 
 var scRsp searchRsp
-
-// ---
 
 type tagInfo struct {
 	Digest        string `json:"digest"`
@@ -106,6 +100,7 @@ type tagsRetentionPolicy struct {
 	Day      int    `short:"d" long:"day" description:"(REQUIRED) The tags of a repository created less than N days should not be deleted." required:"yes"`
 	Max      int    `short:"m" long:"max" description:"(REQUIRED) The maximum quantity of tags created more than N days of a repository should keep untouched." required:"yes"`
 	RepoName string `short:"n" long:"repo_name" description:"Repo name for specific target. If not set, rp_tags will do jobs on all repos." default:""`
+	DryRun   bool   `long:"dry-run" description:"Just analyzing, no actual deleting."`
 }
 
 var tagsRP tagsRetentionPolicy
@@ -129,9 +124,10 @@ func tagAnalyseAndErase() error {
 		return err
 	}
 
-	// 基于 search 接口获取全部 projects 和 repositories 信息
-	// 设置 "q=" 可以获取全部信息
-	// 设置 "q=xxx" 可以过滤指定信息，但是目前发现该功能有 bug ，故暂时无法基于该接口针对指定 repo 进行处理
+	// By "/api/search", you can obtain all the items of projects and repositories
+	// By setting "q=" query parameter, you can obtain ALL items.
+	// By setting "q=<xxx>" query parameter, you can obtain items filtered by <xxx>.
+	// But there exists a bug with it, so can not fulfill procession on specific repo correctly based on this now
 	searchURL := URLGen("/api/search") + "?q=" + tagsRP.RepoName
 	fmt.Println("--------------------")
 	fmt.Println("==> GET", searchURL)
@@ -155,7 +151,7 @@ func tagAnalyseAndErase() error {
 	}
 	fmt.Println("--------------------")
 
-	// 遍历全部 repositories 信息
+	// iterate on all repositories
 	for _, r := range scRsp.Repository {
 		fmt.Println(" ")
 		fmt.Println("------------------------------------------------------")
@@ -163,13 +159,12 @@ func tagAnalyseAndErase() error {
 		fmt.Println("------------------------------------------------------")
 		fmt.Println("---")
 
-		fmt.Println("+------------+----------------------------------------------------+----------------------------------+-----------------+")
-		fmt.Printf("| % -10s | % -50s | % -32s | % -15s |\n", "Action", "TagName", "CreateTime", "DaysPast")
-		fmt.Println("+------------+----------------------------------------------------+----------------------------------+-----------------+")
+		fmt.Println("+--------+----------------------------------------------------+----------------------------------+-----------------+")
+		fmt.Printf("| % -6s | % -50s | % -32s | % -15s |\n", "Action", "TagName", "CreateTime", "DaysPast")
+		fmt.Println("+--------+----------------------------------------------------+----------------------------------+-----------------+")
 
-		// 获取每个 repo 下的 tags 信息
+		// obtain tags info of echo repo
 		tagsListURL := URLGen("/api/repositories") + "/" + r.RepositoryName + "/tags"
-		//fmt.Println("==> GET", tagsListURL)
 
 		_, _, errs := Request.Get(tagsListURL).
 			Set("Cookie", "harbor-lang=zh-cn; beegosessionID="+c.BeegosessionID).
@@ -181,7 +176,7 @@ func tagAnalyseAndErase() error {
 			}
 		}
 
-		// 用于针对每个 repo 下的 tags 进行排序
+		// heap sort on tags of echo repo
 		tagmh = tagminheap{}
 		heap.Init(&tagmh)
 		for _, t := range tlRsp {
@@ -190,25 +185,25 @@ func tagAnalyseAndErase() error {
 			tagC := rfc3339Transform(t.Created)
 			dayPast := time.Now().Sub(tagC).Hours() / 24
 
-			// a. 针对每个 repo ，创建于最近 N 天之内的所有 tag 不做处理
+			// a. by each repo, tags created less than N days keep untouched
 			if tagsRP.Day < int(dayPast) {
 				it := &tagItem{
 					tagName:   t.Name,
 					timestamp: tagC.Unix(),
 				}
-				// 超过 N 天的 tag 保存到 minheap
+				// tags created more than N days sort by minheap
 				//fmt.Printf("[PUSH] %s <==> create: %s    dayPast: %f\n", it.tagName, t.Created, dayPast)
-				fmt.Printf("| % -10s | % -50s | % -32s | % -15f |\n", "PUSH", t.Name, t.Created, dayPast)
+				fmt.Printf("| % -6s | % -50s | % -32s | % -15f |\n", "*", t.Name, t.Created, dayPast)
 				heap.Push(&tagmh, it)
 			} else {
 				//fmt.Printf("[noPUSH] %s <==> create: %s    dayPast: %f\n", t.Name, t.Created, dayPast)
-				fmt.Printf("| % -10s | % -50s | % -32s | % -15f |\n", "not PUSH", t.Name, t.Created, dayPast)
+				fmt.Printf("| % -6s | % -50s | % -32s | % -15f |\n", "", t.Name, t.Created, dayPast)
 			}
 
 		}
-		// b. 针对创建于 N 天之外的 tag ，每个 repo 最多保留 Max 个
+		// b. by each repo, tags created more than N days keep Max number untouched.
 		gtNdays := tagmh.Len()
-		fmt.Println("+------------+----------------------------------------------------+----------------------------------+-----------------+")
+		fmt.Println("+--------+----------------------------------------------------+----------------------------------+-----------------+")
 		fmt.Printf("--> # of tags less than %d days: %d , # of tags more than %d days: %d\n",
 			tagsRP.Day, r.TagsCount-gtNdays, tagsRP.Day, gtNdays)
 		if gtNdays <= tagsRP.Max {
@@ -216,19 +211,22 @@ func tagAnalyseAndErase() error {
 		} else {
 			fmt.Printf("--> max-keep-num-after-Ndays (%d) less than actual num (%d), so START DELETING.\n", tagsRP.Max, gtNdays)
 			fmt.Println("---")
-			for gtNdays > tagsRP.Max {
-				it := heap.Pop(&tagmh).(*tagItem)
-				fmt.Printf("[POP] %s <==> %d\n", it.tagName, it.timestamp)
+			if tagsRP.DryRun == false {
+				for gtNdays > tagsRP.Max {
+					it := heap.Pop(&tagmh).(*tagItem)
+					fmt.Printf("[POP] %s <==> %d\n", it.tagName, it.timestamp)
 
-				// 如果 len(minheap) > max 则删除 len(minheap) - max 个 tag
-				targetURL := URLGen("/api/repositories") + "/" + r.RepositoryName + "/tags/" + it.tagName
-				fmt.Println("==> DELETE", targetURL)
+					targetURL := URLGen("/api/repositories") + "/" + r.RepositoryName + "/tags/" + it.tagName
+					fmt.Println("==> DELETE", targetURL)
 
-				Request.Delete(targetURL).
-					Set("Cookie", "harbor-lang=zh-cn; beegosessionID="+c.BeegosessionID).
-					End(PrintStatus)
+					Request.Delete(targetURL).
+						Set("Cookie", "harbor-lang=zh-cn; beegosessionID="+c.BeegosessionID).
+						End(PrintStatus)
 
-				gtNdays--
+					gtNdays--
+				}
+			} else {
+				fmt.Println("with '--dry-run' setting, just analyzing, no actual deleting.")
 			}
 		}
 	}
@@ -370,7 +368,7 @@ func repoAnalyse() error {
 		return err
 	}
 
-	// 格式化输出当前 RP 设置
+	// output current RP setting with pretty format
 	//format(rp)
 
 	statsURL := URLGen("/api/statistics")
@@ -394,7 +392,9 @@ func repoAnalyse() error {
 		}
 	}
 
-	fmt.Println("=====> current Public Repo Count:", stats.PublicRepoCount)
+	fmt.Println("-------------------------------------------------")
+	fmt.Println("     Current Number of Public Repositories:", stats.PublicRepoCount)
+	fmt.Println("-------------------------------------------------")
 
 	topURL := URLGen("/api/repositories/top") + "?count=" + strconv.Itoa(stats.PublicRepoCount)
 	fmt.Println("==> GET", topURL)
@@ -411,8 +411,7 @@ func repoAnalyse() error {
 	for _, r := range repos {
 		sc := grade(r, rp)
 
-		// NOTE:
-		// 以下代码仅做调试使用
+		// NOTE: codes below only for debug
 		// ===========
 		/*
 			rs, err := json.MarshalIndent(r, "", "  ")
@@ -432,7 +431,9 @@ func repoAnalyse() error {
 		heap.Push(&mhBk, it)
 	}
 
-	fmt.Printf("\n========== 根据分数排名（由低到高）建议删除 public repo 信息如下 ========\n\n")
+	fmt.Println("------------------------------------------------------------------------------------------------------")
+	fmt.Printf("      By the Rank of Scores (from low to high) , Suggestion on Deletion of public repos as follow\n")
+	fmt.Println("------------------------------------------------------------------------------------------------------")
 
 	for mhBk.Len() > 0 {
 		it := heap.Pop(&mhBk).(*repoItem)
@@ -447,16 +448,16 @@ func repoErase() error {
 
 	var num int
 	scanner := bufio.NewScanner(os.Stdin)
-	fmt.Print("\n请输入希望删除的 repo 数量: ")
+	fmt.Print("\nPlease input the number of repo you wish to delete: ")
 	for scanner.Scan() {
 		in, err := strconv.Atoi(scanner.Text())
 		if err != nil {
-			fmt.Print("输入数字不合法，请重新输入: ")
+			fmt.Print("Invalid number, please input again: ")
 			continue
 		}
-		fmt.Println("您输入的数字为:", in)
+		fmt.Println("The number you input: ", in)
 
-		fmt.Print("确认吗 [y/n]: ")
+		fmt.Print("Confirm [y/n]: ")
 
 		if !scanner.Scan() {
 			break
@@ -467,7 +468,7 @@ func repoErase() error {
 			num = in
 			break
 		} else {
-			fmt.Print("请重新输入希望删除的 repo 数量: ")
+			fmt.Print("Please input the number of repo you wish to delete again: ")
 		}
 	}
 
@@ -488,10 +489,7 @@ func repoErase() error {
 		if minh.Len() > 0 {
 			it := heap.Pop(&minh).(*repoItem)
 
-			// NOTE:
-			// 进行删除动作前，必须成功登陆，这里没有进行判定，而是直接发出 delete 动作
-
-			// 对应 repo_del 的调用
+			// NOTE: Before repo deletion running, you must login first. Codes here doing deletion directly without checking.
 			targetURL := URLGen("/api/repositories") + "/" + it.data.Name
 			fmt.Println("==> DELETE", targetURL)
 
@@ -516,12 +514,12 @@ func repoErase() error {
 func rpGCHint() {
 
 	fmt.Println("-----------------------------")
-	fmt.Println("您已成功完成 soft deletion ，若想真正释放磁盘空间，还需要:")
-	fmt.Println("1. 切换到 harbor 的安装主目录（例如 /opt/apps/harbor/）")
-	fmt.Println("2. 运行如下命令以 preview 哪些 files/images 会被删除：")
+	fmt.Println("You have finished 'soft deletion' stage，if you wish to free disk space effectively，you should:")
+	fmt.Println("1. Enter into harbor's main installation directory (e.g. /opt/apps/harbor/)")
+	fmt.Println("2. Run the following commands to preview which files/images will be deleted:")
 	fmt.Println("    a. docker-compose stop")
 	fmt.Println("    b. docker run -it --name gc --rm --volumes-from registry vmware/registry:2.6.2-photon garbage-collect --dry-run /etc/registry/config.yml")
-	fmt.Println("3. 运行如下命令以真正触发 GC 动作：")
+	fmt.Println("3. Run the following commands to trigger GC operation:")
 	fmt.Println("    a. docker run -it --name gc --rm --volumes-from registry vmware/registry:2.6.2-photon garbage-collect  /etc/registry/config.yml")
 	fmt.Println("    b. docker-compose start")
 	fmt.Println("")
