@@ -1,3 +1,13 @@
+<a name="1.1.0"></a>
+# [1.1.0](https://github.com/moooofly/harbor-go-client/compare/v1.0.0...v1.1.0) (2018-10-25)
+
+
+### Features
+
+* add --dry-run to rp_tags sub-command. fix [#11](https://github.com/moooofly/harbor-go-client/issues/11) ([5fd4f39](https://github.com/moooofly/harbor-go-client/commit/5fd4f39))
+
+
+
 <a name="1.0.0"></a>
 # [1.0.0](https://github.com/moooofly/harbor-go-client/compare/v0.9.6...v1.0.0) (2018-10-24)
 
