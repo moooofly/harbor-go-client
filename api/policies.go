@@ -9,7 +9,7 @@ import (
 
 func init() {
 	utils.Parser.AddCommand("policy_update_by_id",
-		"Modify name, description, target and enablement of a policy.",
+		"Modify name, description, target and enablement of a policy. (not support yet)",
 		"This endpoint let user update policy's name, description, target and enablement.",
 		&poUpdateByID)
 	utils.Parser.AddCommand("policy_get_by_id",
@@ -17,7 +17,7 @@ func init() {
 		"This endpoint let user search a policy by specific ID.",
 		&poGetByID)
 	utils.Parser.AddCommand("policy_create",
-		"Create a policy.",
+		"Create a policy. (not support yet)",
 		"This endpoint let user creates a policy, and if it is enabled, the replication will be triggered right now.",
 		&poCreate)
 	utils.Parser.AddCommand("policies_list",
@@ -45,7 +45,13 @@ func (x *policyUpdateByID) Execute(args []string) error {
 //  format:
 //
 // e.g.
-func PutPolicyUpdateByID(baseURL string) {}
+func PutPolicyUpdateByID(baseURL string) {
+	// TODO(moooofly): Here are main steps that Harbor UI does
+	//
+	// 1. By "GET /api/policies/replication/<id>" to get replication rule info by specific ID
+	// 2. By "PUT /api/policies/replication/<id>" to update replication rule info by specific ID
+	// 3. By "GET /api/policies/replication" to get all replication rule info to checkout if update succeeds
+}
 
 type policyGetByID struct {
 	ID int `short:"i" long:"id" description:"(REQUIRED) policy ID" required:"yes"`
@@ -100,7 +106,14 @@ func (x *policyCreate) Execute(args []string) error {
 //  format:
 //
 // e.g.
-func PostPolicyCreate(baseURL string) {}
+func PostPolicyCreate(baseURL string) {
+	// TODO(moooofly): Here are main steps that Harbor UI does
+	//
+	// 1. By "GET /api/policies/replication?name=<xxx>" to check if replication rule with name <xxx> already exists
+	// 2. By "GET /api/projects?name=<yyy>" to get source project info to be replicated
+	// 3. By "GET /api/targets?name=<zzz>" to get endpoint info to replicate to
+	// 4. By "POST /api/policies/replication" to create replication rule based on above info and some other info
+}
 
 type policiesList struct {
 	Name      string `short:"n" long:"name" description:"The replication's policy name." default:""`
