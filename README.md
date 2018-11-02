@@ -179,7 +179,7 @@ You can run integration test with [scripts/regression_test.sh](https://github.co
 - [x] CI (by travis-ci）
 - [x] dockerization
 - [x] godoc (need to optimize)
-- [x] glide support
+- [x] go module support
 - [x] sql-like result output
 
 

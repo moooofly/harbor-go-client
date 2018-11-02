@@ -1,0 +1,14 @@
+# github.com/jessevdk/go-flags v1.4.0
+github.com/jessevdk/go-flags
+# github.com/moul/http2curl v0.0.0-20170919181001-9ac6cf4d929b
+github.com/moul/http2curl
+# github.com/parnurzeal/gorequest v0.2.15
+github.com/parnurzeal/gorequest
+# github.com/pkg/errors v0.0.0-20171018195549-f15c970de5b7
+github.com/pkg/errors
+# golang.org/x/net v0.0.0-20171129192339-a8b929477797 => github.com/golang/net v0.0.0-20181101160248-e11730110bbd
+golang.org/x/net/publicsuffix
+# golang.org/x/sys v0.0.0-20171130163741-8b4580aae2a0 => github.com/golang/sys v0.0.0-20181031143558-9b800f95dbbc
+golang.org/x/sys/unix
+# gopkg.in/yaml.v2 v2.2.1
+gopkg.in/yaml.v2
