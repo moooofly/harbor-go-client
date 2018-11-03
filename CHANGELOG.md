@@ -1,3 +1,24 @@
+<a name="1.1.2"></a>
+# [1.1.2](https://github.com/moooofly/harbor-go-client/compare/v1.1.1...v1.1.2) (2018-11-03)
+
+### Features
+
+* go1.11 module feature supported ([e0a036e](https://github.com/moooofly/harbor-go-client/commit/e0a036e))
+
+### Bug Fixes
+
+* fixup the wrong query string setting ([0f9ee45](https://github.com/moooofly/harbor-go-client/commit/0f9ee45))
+
+
+<a name="1.1.1"></a>
+# [1.1.1](https://github.com/moooofly/harbor-go-client/compare/v1.1.0...v1.1.1) (2018-10-26)
+
+
+### Features
+
+* add comments on two unfulfilled APIs, and update README.md accordingly ([e5dcfd4](https://github.com/moooofly/harbor-go-client/commit/e5dcfd4))
+* update golang version used by Travis ([f665531](https://github.com/moooofly/harbor-go-client/commit/f665531))
+
 <a name="1.1.0"></a>
 # [1.1.0](https://github.com/moooofly/harbor-go-client/compare/v1.0.0...v1.1.0) (2018-10-25)
 
