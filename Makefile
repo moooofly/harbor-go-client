@@ -40,13 +40,18 @@ lint:
 	@# - go get -u github.com/alecthomas/gometalinter  (Install from HEAD)
 	@# - gometalinter --install  (Install all known linters)
 	@echo "==> Running gometalinter ..."
-	gometalinter --exclude=vendor --disable-all --enable=golint --enable=vet --enable=gofmt --enable=misspell ./...
+	gometalinter --exclude=vendor --disable-all --enable=golint --enable=vet --enable=gofmt --enable=misspell
 	find . -name '*.go' -not -path "./vendor/*" | xargs gofmt -w -s
 	@echo ""
 
 test:
 	@echo "==> Testing ..."
 	go test -short -race $(PKGS)
+	@echo ""
+
+deps:
+	@echo "===> Tidy Dependencies ..."
+	go mod tidy && go mod vendor
 	@echo ""
 
 build_linux:
