@@ -51,7 +51,7 @@ func GetOPLogs(baseURL string) {
 		"&tag=" + logs.Tag +
 		"&operation=" + logs.Operation +
 		"&begin_timestamp=" + logs.BeginTimestamp +
-		"&begin_timestamp=" + logs.EndTimestamp +
+		"&end_timestamp=" + logs.EndTimestamp +
 		"&page=" + strconv.Itoa(logs.Page) +
 		"&page_size=" + strconv.Itoa(logs.PageSize)
 
